@@ -1,3 +1,4 @@
+
 clc;
 %==============================================
 % Pressurization Tank Sizing
@@ -6,7 +7,7 @@ clc;
 % Read GMAT Values
 %==============================================
 % Load the data from the Excel file into a table
-filename = 'GMAT_values_16.xlsx';
+filename = 'GMAT_values_20.xlsx';
 data_table= readmatrix(filename);
 
 %Maneuver Time GMAT Values
@@ -47,9 +48,11 @@ disp(m_propellant)
 
 %Initial MMH Mass and Volume GMAT
 m_MMH_GMAT = data_table(1,16);
+roh_MMH= 880; %[kg/m3]
 V_MMH_GMAT = (m_MMH_GMAT / roh_MMH); % [m^3] pressure regulated
 %Initial MON Mass and Volume GMAT
 m_MON_GMAT = data_table(1,17);
+roh_MON= 1438; %[kg/m3]
 V_MON_GMAT = (m_MON_GMAT / roh_MON); % [m^3] pressure regulated
 
 %==============================================
@@ -67,18 +70,6 @@ V_tank_MON = 0.198*2; % [m^3] Tank 198l MEOP=20 bar T=293,15K
 p_tank_MON=20e5; %[Pa]
 T_tank_MON = 293.15; %[K]
 roh_He_MONTank(1) =  py.CoolProp.CoolProp.PropsSI('D','P',p_tank_MON,'T',T_tank_MON,'Helium'); % [kg/m^3]
-
-%==============================================
-% Propellant Values
-%==============================================
-%MMH Values from Sutton2010_Rocket_Propulsion_Elements_8th_Edition_by_Oscar_Biblarz_George_P._Sutton.pdf
-p_vap_MMH= 0.638e5; %[Pa] at 67 degrees 
-T_sat_MMH= 340.15; %[K] at 20 bar pressure
-
-%MON-1 chosen due to Thruster requirement and to facilitate storage
-%conditions (CEA Values)
-p_vap_MON=0.0009e5; %[Pa] at -17 degrees
-T_sat_MON= 296.15; %[K] at 20 bar pressure
 
 %==============================================
 % Pressurant Values
@@ -198,7 +189,7 @@ m_He_maneuver_MONTank(2)=V_MON_maneuver(2)* roh_He_MONTank(1);
 %Heat Flow during Maneuvers
 Q_dot(1) = 50; % [W]
 Q_dot(2) = 0; % [W]
-Q_dot(3) = 250; % [W]
+Q_dot(3) = 200; % [W]
 Q_dot(4) = 0; % [W]
 Q_dot(5) = 0; % [W]
 
@@ -297,7 +288,7 @@ end
 m_He_maneuver_MONTank_final1(3)=m_He_maneuver_MONTank(3);
 m_He_maneuver_MONTank_final2(3)=1;
 while abs(m_He_maneuver_MONTank_final1(3)-m_He_maneuver_MONTank_final2(3))>10^-3
-T_He_MONTank(3)= (cp_He_kg*(m_He_MMHTank(2)*T_He_MONTank(2)+m_He_maneuver_MONTank_final1(3)*T_He_PR(2)))/(cp_He_kg*(m_He_MONTank(2)+m_He_maneuver_MONTank_final1(3)));
+T_He_MONTank(3)= (cp_He_kg*(m_He_MONTank(2)*T_He_MONTank(2)+m_He_maneuver_MONTank_final1(3)*T_He_PR(2)))/(cp_He_kg*(m_He_MONTank(2)+m_He_maneuver_MONTank_final1(3)));
 roh_He_MONTank(3)= py.CoolProp.CoolProp.PropsSI('D','P',p_He_MONTank,'T',T_He_MONTank(3), 'Helium'); % [J/kg]
 m_He_maneuver_MONTank_final2(3)=V_MON_maneuver(3)*roh_He_MONTank(3);
 m_He_maneuver_MONTank_final1(3)=m_He_maneuver_MONTank_final1(3)+0.001;
@@ -361,16 +352,8 @@ while abs(m_He_maneuver_MMHTank_final1(4)-m_He_maneuver_MMHTank_final2(4))>10^-3
 T_He_MMHTank(4)= (cp_He_kg*(m_He_MMHTank(3)*T_He_MMHTank(3)+m_He_maneuver_MMHTank_final1(4)*T_He_PR(3)))/(cp_He_kg*(m_He_MMHTank(3)+m_He_maneuver_MMHTank_final1(4)));
 roh_He_MMHTank(4)= py.CoolProp.CoolProp.PropsSI('D','P',p_He_MMHTank,'T',T_He_MMHTank(4), 'Helium'); % [J/kg]
 m_He_maneuver_MMHTank_final2(4)=V_MMH_maneuver(4)*roh_He_MMHTank(4);
-if i==1
-    m_He_maneuver_MMHTank_final1(4)=m_He_maneuver_MMHTank_final1(4)-0.001;
-else
-    m_He_maneuver_MMHTank_final1(4)=m_He_maneuver_MMHTank_final1(4)-0.001;
-end
-
+m_He_maneuver_MMHTank_final1(4)=m_He_maneuver_MMHTank_final1(4)-0.001;
 %disp(["Error", abs(m_He_maneuver_MMHTank_final1(4)-m_He_maneuver_MMHTank_final2(4))]);
-if abs(m_He_maneuver_MMHTank_final1(4)-m_He_maneuver_MMHTank_final2(4))<10^-3
-    break
-end
 end
 
 %MON Tank
@@ -378,7 +361,7 @@ end
 m_He_maneuver_MONTank_final1(4)=m_He_maneuver_MONTank(4);
 m_He_maneuver_MONTank_final2(4)=1;
 while abs(m_He_maneuver_MONTank_final1(4)-m_He_maneuver_MONTank_final2(4))>10^-3
-T_He_MONTank(4)= (cp_He_kg*(m_He_MMHTank(3)*T_He_MONTank(3)+m_He_maneuver_MONTank_final1(4)*T_He_PR(3)))/(cp_He_kg*(m_He_MONTank(3)+m_He_maneuver_MONTank_final1(4)));
+T_He_MONTank(4)= (cp_He_kg*(m_He_MONTank(3)*T_He_MONTank(3)+m_He_maneuver_MONTank_final1(4)*T_He_PR(3)))/(cp_He_kg*(m_He_MONTank(3)+m_He_maneuver_MONTank_final1(4)));
 roh_He_MONTank(4)= py.CoolProp.CoolProp.PropsSI('D','P',p_He_MONTank,'T',T_He_MONTank(4), 'Helium'); % [J/kg]
 m_He_maneuver_MONTank_final2(4)=V_MON_maneuver(4)*roh_He_MONTank(4);
 m_He_maneuver_MONTank_final1(4)=m_He_maneuver_MONTank_final1(4)-0.001;
@@ -450,7 +433,7 @@ end
 m_He_maneuver_MONTank_final1(5)=m_He_maneuver_MONTank(5);
 m_He_maneuver_MONTank_final2(5)=1;
 while abs(m_He_maneuver_MONTank_final1(5)-m_He_maneuver_MONTank_final2(5))>10^-1
-T_He_MONTank(5)= (cp_He_kg*(m_He_MMHTank(4)*T_He_MONTank(4)+m_He_maneuver_MONTank_final1(5)*T_He_PR(4)))/(cp_He_kg*(m_He_MONTank(4)+m_He_maneuver_MONTank_final1(5)));
+T_He_MONTank(5)= (cp_He_kg*(m_He_MONTank(4)*T_He_MONTank(4)+m_He_maneuver_MONTank_final1(5)*T_He_PR(4)))/(cp_He_kg*(m_He_MONTank(4)+m_He_maneuver_MONTank_final1(5)));
 roh_He_MONTank(5)= py.CoolProp.CoolProp.PropsSI('D','P',p_He_MONTank,'T',T_He_MONTank(4), 'Helium'); % [J/kg]
 m_He_maneuver_MONTank_final2(5)=V_MON_maneuver(5)*roh_He_MONTank(5);
 m_He_maneuver_MONTank_final1(5)=m_He_maneuver_MONTank_final1(5)-0.001;
@@ -520,7 +503,7 @@ end
 m_He_maneuver_MONTank_final1(6)=m_He_maneuver_MONTank(6);
 m_He_maneuver_MONTank_final2(6)=1;
 while abs(m_He_maneuver_MONTank_final1(6)-m_He_maneuver_MONTank_final2(6))>10^-1
-T_He_MONTank(6)= (cp_He_kg*(m_He_MMHTank(5)*T_He_MONTank(5)+m_He_maneuver_MONTank_final1(6)*T_He_PR(5)))/(cp_He_kg*(m_He_MONTank(5)+m_He_maneuver_MONTank_final1(6)));
+T_He_MONTank(6)= (cp_He_kg*(m_He_MONTank(5)*T_He_MONTank(5)+m_He_maneuver_MONTank_final1(6)*T_He_PR(5)))/(cp_He_kg*(m_He_MONTank(5)+m_He_maneuver_MONTank_final1(6)));
 roh_He_MONTank(6)= py.CoolProp.CoolProp.PropsSI('D','P',p_He_MONTank,'T',T_He_MONTank(6), 'Helium'); % [J/kg]
 m_He_maneuver_MONTank_final2(6)=V_MON_maneuver(6)*roh_He_MONTank(6);
 m_He_maneuver_MONTank_final1(6)=m_He_maneuver_MONTank_final1(6)+0.001;
@@ -556,10 +539,13 @@ m_He_MONTank(6)=m_He_MONTank(5)+m_He_maneuver_MONTank_final2(6);
 % Total Mass of Helium required
 m_He_total= m_He_maneuver_final(1)+m_He_maneuver_final(2)+m_He_maneuver_final(3)+m_He_maneuver_final(4)+m_He_maneuver_final(5)+m_He_maneuver_final(6);
 mdot_He_maneuver_final= m_He_maneuver_final/t_man;
+V_He_total =m_He_total/roh_He_HeTank(1);
 %Total Helium Mass at the beginning of operation in Propellant Tanks and
 %Helium Tank
 disp(["Helium per maneuver MON Tank",m_He_maneuver_MONTank_final2])
 disp(["Helium per maneuver MMH Tank",m_He_maneuver_MMHTank_final2])
+disp(["Helium per maneuver Total",m_He_maneuver_MMHTank_final2+m_He_maneuver_MONTank_final2])
+disp(T_He_PR-273.15)
 
 
 m_He_allTanks= m_He_HeTank(1)+m_He_MMHTank(1)+m_He_MONTank(1);
@@ -589,50 +575,70 @@ disp(["Start Iteration",m_He_maneuver_MMHTank_final1]);
 disp(["Finished Iteration",m_He_maneuver_MMHTank_final2]);
 disp(["Mass of Helium required each maneuver MON Tank[kg]",m_He_maneuver_MONTank_final2]);
 
-fig1=figure(1);
-plot(T-273.15);
-xlabel('Point in time');
-ylabel('Temperature [ºC]');
-title('Temperature');
+% fig1=figure(1);
+% plot(T-273.15);
+% xlabel('Point in time');
+% ylabel('Temperature [ºC]');
+% ylim([-30 60]);
+% title('Temperature');
 
-fig2=figure(2);
-plot(P*(1e-5));
-xlabel('Point in time');
-ylabel('Pressure [bar]');
-title('Pressure');
+% fig2=figure(2);
+% plot(P*(1e-5));
+% xlabel('Point in time');
+% ylabel('Pressure [bar]');
+% title('Pressure');
 
-fig3=figure(3);
-plot(roh_He_HeTank);
-xlabel('Point in time');
-ylabel('Density [kg/m^3]');
-title('Density');
+% fig3=figure(3);
+% plot(roh_He_HeTank);
+% xlabel('Point in time');
+% ylabel('Density [kg/m^3]');
+% title('Density');
 
 fig4=figure(4);
 plot(t_man_tot/60,P*(1e-5));
 xlabel ('Total Maneuver time[min]');
 ylabel('Pressure [bar]');
-
+ 
 fig5=figure(5);
 plot(t_man_tot/60,T-273.15);
+ylim([-30 60]);
 xlabel ('Total Maneuver time[min]');
 ylabel('Temperature [ºC]');
-
-fig6=figure(6);
-plot(t_man_tot0/60,roh_He_HeTank);
-xlabel ('Total Maneuver time[min]');
-ylabel('Density [kg/m^3]');
+ 
+% fig6=figure(6);
+% plot(t_man_tot0/60,roh_He_HeTank);
+% xlabel ('Total Maneuver time[min]');
+% ylabel('Density [kg/m^3]');
 
 fig8=figure(8);
-plot(m_He_HeTank);
-xlabel ('Point in time');
-ylabel('Mass Helium in Helium Tank[kg]');
+plot(t_man_tot0/60,(m_He_HeTank/m_He_HeTank(1))*100);
+xlabel ('Maneuver Time [min]');
+ylabel('Fill Level Helium Tank[%]');
 
 fig9=figure(9);
-plot(m_He_MMHTank);
-xlabel ('Point in time');
-ylabel('Mass Helium in MMH Tank[kg]');
+plot(t_man_tot0/60, m_He_HeTank,t_man_tot0/60, m_He_MMHTank, t_man_tot0/60, m_He_MONTank);
+xlabel ('Total Maneuver Time [min]');
+ylabel('Mass Helium in Tank[kg]');
 
 fig10=figure(10);
-plot(m_He_MONTank);
-xlabel ('Point in time');
+plot(t_man_tot0/60, m_He_MONTank);
+xlabel ('Maneuver Time [min]');
 ylabel('Mass Helium in MON Tank[kg]');
+
+fig11=figure(11);
+plot(t_man_tot0/60, T_He_MONTank -273.15);
+ylim([18 36]);
+xlabel ('Maneuver Time [min]');
+ylabel('Temperature Helium in MON Tank[ºC]');
+
+fig12=figure(12);
+plot(t_man_tot0/60, T_He_MMHTank-273.15);
+ylim([18 36]);
+xlabel ('Maneuver Time [min]');
+ylabel('Temperature Helium in MMH Tank[ºC]');
+
+fig13=figure(13);
+plot(t_man_tot0/60,T_He_MONTank -273.15,t_man_tot0/60,T_He_MMHTank-273.15);
+ylim([18 36]);
+xlabel ('Maneuver Time [min]');
+ylabel('Temperature Helium [ºC]');

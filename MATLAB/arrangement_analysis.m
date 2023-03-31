@@ -27,8 +27,8 @@ l_engine_chem_missalignment = l_engine_chem_missalignment * pi / 180; % [rad]
 
 
 %solar panel
-A_solar = 27; % [m^2]
-m_solar = A_solar/2 * 2.4; % [kg]
+A_solar = 13; % [m^2]
+m_solar = A_solar/2 * 5.67; % [kg]
 
 %INS
 m_INS = 50; % [kg]
@@ -165,15 +165,10 @@ cgx_pre = (m_engine_chem * l_engine_chem(1) + m_CPROP_dry * l_CPROP_dry(1) +  m_
        + m_MON_tank_1 .* xl_MON + m_MON_tank_2 .* xl_MON + m_Xe_tank_1 .* l_Xe_1(1) + m_Xe_tank_2 .* l_Xe_2(1) ) ...
        ./ m_tot; % [m]
 
-cg = zeros(3,10); % [m] [cgx0, cgx1, cgx2, ...; cgy0, cgy1, cgy2, ...; cgz0, cgz1, cgz2, ...]
-cg(1,:) = cgx_pre; % [m]
-%cg(2,:) = 0.06; % [m] for sensitivity analysis
-%cg(3,:) = 0.06; % [m] for sensitivity analysis
-
 %position optimized for station keeping
 
 
-l_solar_1 = [cgx_pre(8); 5; 0]; % [m]
+l_solar_1 = [cgx_pre(8); 4.6029; 0]; % [m]
 l_solar_2 = [cgx_pre(8); -l_solar_1(2); 0]; % [m]
 l_INS = [cgx_pre(8); 0; 0.83]; % [m]
 l_COM = [cgx_pre(8); 0; -l_INS(3) * m_INS/m_COM]; % [m]
@@ -182,6 +177,11 @@ l_inertia = [cgx_pre(8); 0; 0]; % [m]
 cgx = (cgx_pre .* m_tot + m_solar * l_solar_1(1) + m_solar * l_solar_1(1) +... %cg with all systems involved
         m_COM * l_COM(1) + m_INS * l_INS(1) + m_inertia * l_inertia(1)) ...
        ./(m_dry + m_cprop + m_eprop); % [m]
+
+cg = zeros(3,10); % [m] [cgx0, cgx1, cgx2, ...; cgy0, cgy1, cgy2, ...; cgz0, cgz1, cgz2, ...]
+cg(1,:) = cgx; % [m]
+%cg(2,:) = 0.06; % [m] for sensitivity analysis
+%cg(3,:) = 0.06; % [m] for sensitivity analysis
 
 l_MMH_1 = zeros(3,10); % [m]
 l_MMH_1(1,:) = xl_MMH; % [m]
@@ -339,7 +339,7 @@ Inertia_cond = zeros(1,3);
 
 
 %RCS
-off = 0.5596; %offset for RCS calculation
+off = 0.5596; %offset for RCS calculation or additional distance to the cuboids corners in Y and Z
 l_RCS_1 = [cgx_pre(8); l_sat(2)+off; l_sat(3)+off]; % [m]
 l_RCS_2 = [cgx_pre(8); l_sat(2)+off; l_sat(3)+off]; % [m]
 
