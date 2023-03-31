@@ -8,7 +8,7 @@
 
 Create Moon Phobos;
 GMAT Phobos.NAIFId = 401;
-GMAT Phobos.OrbitSpiceKernelName = {'res\mar085.bsp'};
+GMAT Phobos.OrbitSpiceKernelName = {'.\res\mar085.bsp'};
 GMAT Phobos.OrbitColor = Tan;
 GMAT Phobos.TargetColor = DarkGray;
 GMAT Phobos.EquatorialRadius = 13.5;
@@ -24,7 +24,7 @@ GMAT Phobos.SpinAxisDECConstant = 90;
 GMAT Phobos.SpinAxisDECRate = -0.5570000000000001;
 GMAT Phobos.RotationConstant = 190.147;
 GMAT Phobos.RotationRate = 360.9856235;
-GMAT Phobos.TextureMapFileName = 'res\Phobos_map.jpg';
+GMAT Phobos.TextureMapFileName = '.\res\Phobos_map.jpg';
 GMAT Phobos.3DModelFile = '';
 GMAT Phobos.3DModelOffsetX = 0;
 GMAT Phobos.3DModelOffsetY = 0;
@@ -36,7 +36,7 @@ GMAT Phobos.3DModelScale = 10;
 
 Create Moon Deimos;
 GMAT Deimos.NAIFId = 402;
-GMAT Deimos.OrbitSpiceKernelName = {'res\mar085.bsp'};
+GMAT Deimos.OrbitSpiceKernelName = {'.\res\mar085.bsp'};
 GMAT Deimos.OrbitColor = Tan;
 GMAT Deimos.TargetColor = DarkGray;
 GMAT Deimos.EquatorialRadius = 7.5;
@@ -589,6 +589,7 @@ GMAT PPS1350negVtimes10.ConstantThrust = 0.9;
 
 
 
+
 %----------------------------------------
 %---------- ForceModels
 %----------------------------------------
@@ -890,9 +891,9 @@ GMAT DC.Algorithm = NewtonRaphson;
 
 Create OrbitView MarsView;
 GMAT MarsView.SolverIterations = Current;
-GMAT MarsView.UpperLeft = [ 0 0.2542955326460481 ];
-GMAT MarsView.Size = [ 0.9675266903914591 0.7345360824742269 ];
-GMAT MarsView.RelativeZOrder = 591;
+GMAT MarsView.UpperLeft = [ 0 0.5191168551427033 ];
+GMAT MarsView.Size = [ 1.023375142531357 0.4690360796984384 ];
+GMAT MarsView.RelativeZOrder = 181;
 GMAT MarsView.Maximized = false;
 GMAT MarsView.Add = {MomenTUM, Mars};
 GMAT MarsView.CoordinateSystem = MarsFK5;
@@ -922,9 +923,9 @@ GMAT MarsView.EnableConstellations = On;
 
 Create OrbitView OrbitView1;
 GMAT OrbitView1.SolverIterations = Current;
-GMAT OrbitView1.UpperLeft = [ 0.0008896797153024911 0 ];
-GMAT OrbitView1.Size = [ 0.5822953736654805 0.9243986254295533 ];
-GMAT OrbitView1.RelativeZOrder = 21;
+GMAT OrbitView1.UpperLeft = [ 0.0008551881413911061 0 ];
+GMAT OrbitView1.Size = [ 0.6009122006841505 0.9240710823909531 ];
+GMAT OrbitView1.RelativeZOrder = 10;
 GMAT OrbitView1.Maximized = false;
 GMAT OrbitView1.Add = {MomenTUM, Earth, Mars, Sun};
 GMAT OrbitView1.CoordinateSystem = SunEcliptic;
@@ -958,7 +959,7 @@ GMAT DistanceToPhobos.UpperLeft = [ 0.3497237569060773 0.008812856402280975 ];
 GMAT DistanceToPhobos.Size = [ 0.2223756906077348 0.8792120269569725 ];
 GMAT DistanceToPhobos.RelativeZOrder = 1845;
 GMAT DistanceToPhobos.Maximized = false;
-GMAT DistanceToPhobos.Filename = 'result\RMAG_phobos.txt';
+GMAT DistanceToPhobos.Filename = '.\result\RMAG_phobos.txt';
 GMAT DistanceToPhobos.Precision = 16;
 GMAT DistanceToPhobos.Add = {MomenTUM.A1ModJulian, MomenTUM.Phobos.RMAG};
 GMAT DistanceToPhobos.WriteHeaders = true;
@@ -971,9 +972,9 @@ GMAT DistanceToPhobos.WriteReport = true;
 
 Create GroundTrackPlot GroundTrackPlot1;
 GMAT GroundTrackPlot1.SolverIterations = Current;
-GMAT GroundTrackPlot1.UpperLeft = [ 0.2722419928825623 0.3333333333333333 ];
-GMAT GroundTrackPlot1.Size = [ 0.6850533807829181 0.5833333333333334 ];
-GMAT GroundTrackPlot1.RelativeZOrder = 16;
+GMAT GroundTrackPlot1.UpperLeft = [ 0.2807867730900798 0.332794830371567 ];
+GMAT GroundTrackPlot1.Size = [ 0.7069555302166477 0.5831987075928917 ];
+GMAT GroundTrackPlot1.RelativeZOrder = 5;
 GMAT GroundTrackPlot1.Maximized = false;
 GMAT GroundTrackPlot1.Add = {MomenTUM, Earth};
 GMAT GroundTrackPlot1.DataCollectFrequency = 1;
@@ -982,13 +983,13 @@ GMAT GroundTrackPlot1.NumPointsToRedraw = 0;
 GMAT GroundTrackPlot1.ShowPlot = true;
 GMAT GroundTrackPlot1.MaxPlotPoints = 300;
 GMAT GroundTrackPlot1.CentralBody = Phobos;
-GMAT GroundTrackPlot1.TextureMap = 'res\Phobos_map.jpg';
+GMAT GroundTrackPlot1.TextureMap = '.\res\Phobos_map.jpg';
 
 Create XYPlot DistancePho;
 GMAT DistancePho.SolverIterations = Current;
-GMAT DistancePho.UpperLeft = [ 0.320729537366548 0.009450171821305841 ];
-GMAT DistancePho.Size = [ 0.672153024911032 0.2379725085910653 ];
-GMAT DistancePho.RelativeZOrder = 605;
+GMAT DistancePho.UpperLeft = [ 0.330672748004561 0.009154550350026925 ];
+GMAT DistancePho.Size = [ 0.693557582668187 0.2380183091007 ];
+GMAT DistancePho.RelativeZOrder = 25;
 GMAT DistancePho.Maximized = false;
 GMAT DistancePho.XVariable = MomenTUM.A1ModJulian;
 GMAT DistancePho.YVariables = {MomenTUM.Phobos.RMAG};
@@ -997,9 +998,9 @@ GMAT DistancePho.ShowPlot = true;
 
 Create OrbitView PhobosView;
 GMAT PhobosView.SolverIterations = Current;
-GMAT PhobosView.UpperLeft = [ 0.6120996441281139 0.2336769759450172 ];
-GMAT PhobosView.Size = [ 0.3914590747330961 0.7087628865979382 ];
-GMAT PhobosView.RelativeZOrder = 621;
+GMAT PhobosView.UpperLeft = [ 0.6314139110604333 0.2331717824448034 ];
+GMAT PhobosView.Size = [ 0.4039338654503991 0.7086698976844372 ];
+GMAT PhobosView.RelativeZOrder = 35;
 GMAT PhobosView.Maximized = false;
 GMAT PhobosView.Add = {MomenTUM, Phobos};
 GMAT PhobosView.CoordinateSystem = PhobosFixed;
@@ -1033,7 +1034,7 @@ GMAT Result.UpperLeft = [ 0.09457540471456972 0.102315562735595 ];
 GMAT Result.Size = [ 0.5964214711729622 0.7921378567582121 ];
 GMAT Result.RelativeZOrder = 1736;
 GMAT Result.Maximized = false;
-GMAT Result.Filename = 'result\result.txt';
+GMAT Result.Filename = '.\result\result.txt';
 GMAT Result.Precision = 12;
 GMAT Result.Add = {MomenTUM.A1Gregorian, MomenTUM.ElapsedSecs, FiniteC3sec, TCMsec, FiniteMOIsec, FiniteMatchPlanesec, FiniteRaisePeriToMinsec, CircularizeCount, Circularizesec, CircularizesecSum, FiniteSpiralSec, EOLcount, EOLsec, EOLsecSum, MomenTUM.ElectricTank1.FuelMass, MomenTUM.CTankFuel.FuelMass, MomenTUM.CTankOx.FuelMass, status, MomenTUM.TotalMass};
 GMAT Result.WriteHeaders = true;
@@ -1046,9 +1047,9 @@ GMAT Result.WriteReport = true;
 
 Create XYPlot MarsRMAG;
 GMAT MarsRMAG.SolverIterations = Current;
-GMAT MarsRMAG.UpperLeft = [ 0.6850533807829181 0.2611683848797251 ];
-GMAT MarsRMAG.Size = [ 0.3073843416370107 0.1890034364261168 ];
-GMAT MarsRMAG.RelativeZOrder = 31;
+GMAT MarsRMAG.UpperLeft = [ 0.7066704675028507 0.2606354334948842 ];
+GMAT MarsRMAG.Size = [ 0.3172748004561003 0.1890145395799677 ];
+GMAT MarsRMAG.RelativeZOrder = 15;
 GMAT MarsRMAG.Maximized = false;
 GMAT MarsRMAG.XVariable = MomenTUM.A1ModJulian;
 GMAT MarsRMAG.YVariables = {MomenTUM.Mars.Altitude};
@@ -1085,6 +1086,7 @@ GMAT CircularizesecSum = 0;
 GMAT EOLsecSum = 0;
 GMAT SetEccsec = 0;
 GMAT status = 0;
+
 
 
 
@@ -1212,7 +1214,7 @@ Target 'Mars Catch' DC {SolveMode = Solve, ExitMode = SaveAndContinue, ShowProgr
    Propagate NearMars(MomenTUM) {MomenTUM.ElapsedSecs = FiniteMOIsec, OrbitColor = [255 255 0]};
    EndFiniteBurn 'EndFiniteMOI' MOIFinite(MomenTUM);
    GMAT 'set status' status = 3.1;
-   Propagate 'Prop Lat 0' NearMarsBigStep(MomenTUM) {MomenTUM.Mars.Latitude = 0.0, OrbitColor = [255 0 255]};
+   Propagate 'Prop Lat 0' NearMarsBigStep(MomenTUM) {MomenTUM.Mars.Latitude = 0.0};
    Achieve DC(MomenTUM.Mars.RadApo = 340000, {Tolerance = 0.1});
 EndTarget;  % For targeter DC
 Target 'Match Plane' DC {SolveMode = Solve, ExitMode = SaveAndContinue, ShowProgressWindow = true};
@@ -1232,10 +1234,10 @@ Target 'Raise Peri to min' DC {SolveMode = Solve, ExitMode = SaveAndContinue, Sh
    Propagate NearMars(MomenTUM) {MomenTUM.ElapsedSecs = FiniteRaisePeriToMinsec, OrbitColor = [255 255 0]};
    EndFiniteBurn RaisePeriToMin(MomenTUM);
    GMAT 'set status' status = 5.1;
-   Propagate 'Prop Peri' NearMars(MomenTUM) {MomenTUM.Mars.Periapsis, OrbitColor = [255 0 255]};
+   Propagate 'Prop Peri' NearMars(MomenTUM) {MomenTUM.Mars.Periapsis};
    Achieve DC(MomenTUM.Mars.Altitude = 300, {Tolerance = 0.1});
 EndTarget;  % For targeter DC
-Propagate 'Prop TA' NearMars(MomenTUM) {MomenTUM.Mars.TA = 179, StopTolerance = 0.001, OrbitColor = [255 0 255]};
+Propagate 'Prop TA' NearMars(MomenTUM) {MomenTUM.Mars.TA = 179, StopTolerance = 0.001};
 GMAT 'set status' status = 6.0;
 While 'While Ecc > 0.01' MomenTUM.Mars.ECC >= 0.01
    GMAT 'start rec time' measure_cache = MomenTUM.ElapsedSecs;
@@ -1373,6 +1375,7 @@ BeginScript 'EOLsec x10'
    
    % new date of arrival
 EndScript;
+
 
 
 
