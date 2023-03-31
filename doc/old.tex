@@ -1,0 +1,244 @@
+
+\section{Flight Trajectory}
+The SC flight trajectory starts by its launch carrier ejection of the Ariane 62 on the 00.00.2028. At this point the C3 orbital energy of the SC is at $ 0.00 \frac{m^2}{s^2}$ where $ 0.00 \frac{m^2}{s^2}$ are required for the 2018 launch opportunity. After a propagation of 3 days and approximately escape vector alignment, the MatchC3 maneuver is performed to achieve the required C3. Aditionally, the Trans-Mars Injection (TMI) achieves B-Plane targeting requirements so that at 00.00.2028 the SC is crossing its Martian Periapsis at 200km altitude over the equator. At this point, the Mars Orbit Injection (MOI) is performed to keep the SC in the martian sphere of influence with an Apoapsis of 00km. When crossing Phobos orbital plane, the MatchPlane inclination change is performed almost exactly at its Apoapsis where then next the RaisePeri maneuver brings its Periapsis to 00km, which corresponds to Phobos mean altitude. Upon arrival at its Periapsis the SC performs the ParkingInsertion maneuver which lowers its Apoapsis to an orbit where after an orbital period the position of phobos and the SC aligns. At allignment, the last maneuver LowerApo is performed where the distance to phobos at Apoapsis shall be 00km.
+
+After this sequence of maneuvers the SC is now in a pseudo orbit around phobos with ground-track characteristics as shown a section in Figure x and RMAG evolution in Figure x. The entirety of maneuvers and its required DeltaV is summarized in Table \ref{tab:man-dv} and visually presented in Figure x below.
+
+\begin{table}
+\centering
+\caption{Required DeltaV for Impulsive Maneuvers}
+\label{tab:man-dv}
+\begin{tabular}{|l|r|l|c|c|c|} 
+\cline{1-2}\cline{4-6}
+\multicolumn{1}{|c|}{\textbf{Maneuver Name}} & \multicolumn{1}{c|}{\textbf{ Magn. [m/s]}} &                       & \textbf{V}           & \multicolumn{1}{l|}{\textbf{N}} & \multicolumn{1}{l|}{\textbf{B}}  \\ 
+\cline{1-2}\cline{4-6}
+Match C3                                     & 509.350                                    &                       & x                    &                                 &                                  \\ 
+\cline{1-2}\cline{4-6}
+TCM                                          & 34.553                                     &                       & x                    & x                               & x                                \\ 
+\cline{1-2}\cline{4-6}
+MOI                                          & 751.782                                    &                       & x                    &                                 &                                  \\ 
+\cline{1-2}\cline{4-6}
+Match INC                                    & 13.153                                     &                       &                      & x                               &                                  \\ 
+\cline{1-2}\cline{4-6}
+Raise Peri                                   & 35.660                                     &                       & x                    &                                 &                                  \\ 
+\cline{1-2}\cline{4-6}
+Parking Insertion                            & 197.507                                    &                       & x                    &                                 &                                  \\ 
+\cline{1-2}\cline{4-6}
+Match Phobos                                 & 640.000                                    &                       & x                    &                                 &                                  \\ 
+\cline{1-2}\cline{4-6}
+Station Keeping                              & 104.950                                    & \multicolumn{1}{r|}{} & x                    & x                               & x                                \\ 
+\cline{1-2}\cline{4-6}
+EOL                                          & 561.664                                    &                       & x                    &                                 &                                  \\ 
+\cline{1-2}\cline{4-6}
+\textbf{TOTAL SUM}                           & \textbf{2848.619}                          & \multicolumn{1}{l}{}  & \multicolumn{1}{l}{} & \multicolumn{1}{l}{}            & \multicolumn{1}{l}{}             \\
+\cline{1-2}
+\end{tabular}
+\end{table}
+
+
+\begin{table}[htbp]
+\centering
+\caption{Required DeltaV for Finite BiProp Only}
+\begin{tabular}{|l|r|l|c|l|l|} 
+\cline{1-2}\cline{4-6}
+\multicolumn{1}{|c|}{\textbf{Maneuver Name}} & \multicolumn{1}{c|}{\begin{tabular}[c]{@{}c@{}}\textbf{ Magn. [m/s]}\end{tabular}} &  & \textbf{V} & \textbf{N} & \textbf{B}  \\ 
+\cline{1-2}\cline{4-6}
+Match C3                                      & 509.350                                                                                          &  & x          &            &            \\ 
+\cline{1-2}\cline{4-6}
+TCM                                          & 34.553                                                                                          &  & x          & x          & x         \\ 
+\cline{1-2}\cline{4-6}
+MOI                                          & 751.782                                                                                          &  & x          &            &            \\ 
+\cline{1-2}\cline{4-6}
+Match INC                                   & 13.153                                                                                           &  &            & x          &           \\ 
+\cline{1-2}\cline{4-6}
+Raise Peri                                    & 35.660                                                                                          &  & x          &            &            \\ 
+\cline{1-2}\cline{4-6}
+Parking Insertion                                & 197.507                                                                                           &  & x          &            &            \\ 
+\cline{1-2}\cline{4-6}
+Match Phobos                                     & 640.000                                                                                          &  & x          &            &            \\
+\cline{1-2}\cline{4-6}
+EOL                                     & 561.664                                                                                          &  & x          &            &           \\
+\cline{1-2}\cline{4-6}
+\end{tabular}
+\label{tab:man-dv-biprop-only}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Required DeltaV for Finite BiProp \& Electric}
+\begin{tabular}{|l|r|l|c|l|l|} 
+\cline{1-2}\cline{4-6}
+\multicolumn{1}{|c|}{\textbf{Maneuver Name}} & \multicolumn{1}{c|}{\begin{tabular}[c]{@{}c@{}}\textbf{ Magn. [m/s]}\end{tabular}} &  & \textbf{V} & \textbf{N} & \textbf{B}  \\ 
+\cline{1-2}\cline{4-6}
+Match C3                                      & open                                                                                          &  & x          &            &            \\ 
+\cline{1-2}\cline{4-6}
+TCM                                          & open                                                                                          &  & x          & x          & x         \\ 
+\cline{1-2}\cline{4-6}
+MOI                                          & open                                                                                          &  & x          &            &            \\ 
+\cline{1-2}\cline{4-6}
+Match INC                                   & open                                                                                           &  &            & x          &           \\ 
+\cline{1-2}\cline{4-6}
+Raise Peri                                    & open                                                                                          &  & x          &            &            \\ 
+\cline{1-2}\cline{4-6}
+Parking Insertion                                & open                                                                                           &  & x          &            &            \\ 
+\cline{1-2}\cline{4-6}
+Match Phobos                                     & open                                                                                          &  & x          &            &            \\
+\cline{1-2}\cline{4-6}
+EOL                                     & open                                                                                          &  & x          &            &           \\
+\cline{1-2}\cline{4-6}
+\end{tabular}
+\label{tab:man-dv-biprop-electric}
+\end{table}
+
+
+
+\section{Impulsive vs Continuous}
+
+To determine which maneuvers are suitable for a continuous burn, the vector components V,N,B are taken as indication, where a unidirectional change of the V component corresponds to a capability of a continuous burn if there are no further constrains as time or being part of a series. This primarily gives the ParkingInsertion and LowerApo maneuver as options for a continuous burn. MatchC3 could be also viable if it could be separated from its series.
+
+A continuous burn, as the choice for electric propulsion for these cases would result in, is an alternation of the specific flight path and time of arrival. Since no time requirement is given for arrival the option of performing these maneuvers electrically remains.
+
+\section{Propulsion Type Selection}
+\subsection{General Analysis}
+insert Svens Result Graph here to visualize the different usecases of electric, mono- and bi-prop.
+
+\subsection{Mono Propellant Model}
+
+\begin{equation}
+    m_{mono} = ( m_{thr} + m_{tank}) \cdot S_{valves} + m_{fuel}
+    \label{eq:mass-mono}
+\end{equation}
+\begin{equation*}
+    \begin{array}{c}
+    m_{thr} = m_{unit(datasheet)} \\
+    m_{tank} =  f(x) \\
+    m_{fuel} = f(x) \\
+    S_{valves} = 1.25
+    \end{array}
+    \label{eq:mass-mono-items}
+\end{equation*}
+
+MATLAB script Mono Prop explained
+
+\subsection{Bi Propellant Model}
+
+\begin{equation}
+    m_{bi} = ( m_{thr} + 2 \cdot m_{tank}) \cdot S_{valves} + m_{ox} + m_{fuel}
+    \label{eq:mass-bi}
+\end{equation}
+\begin{equation*}
+    \begin{array}{c}
+    m_{thr} =  2 \cdot m_{unit(datasheet)} \\
+    m_{tank} =  \max \lbrace ( 2 \pi [ ( \frac{m_{ox,fuel}}{\varrho_{ox,fuel}} \cdot 1.17 ) \frac{3}{4 \pi}] \cdot p_{tank} \cdot \frac{\varrho_{mat}}{\sigma_{mat}} ) \cdot 1.7 \rbrace\\
+    m_{ox,fuel} = f(\Delta v) \curvearrowright \textnormal{iterated} \\
+    S_{valves} = 1.36
+    \end{array}
+    \label{eq:mass-bi-items}
+\end{equation*}
+
+MATLAB script Bi Prop explained
+
+\subsection{Electric Model}
+
+\begin{equation}
+    m_{el} = ( m_{thr} +  m_{tank} + m_{PSU} ) \cdot S_{sys}  + m_{noble} + m_{solar\textnormal{+}}
+    \label{eq:mass-elec}
+\end{equation}
+\begin{equation*}
+    \begin{array}{c}
+    m_{thr} = m_{unit(datasheet)}  \\
+    m_{tank} =  ( 2 \pi [ ( \frac{m_{noble}}{\varrho_{noble}} \cdot 1.32 ) \frac{3}{4 \pi}] \cdot p_{tank} \cdot \frac{\varrho_{mat}}{\sigma_{mat}} ) \cdot 1.44 \\
+    m_{PSU} = m_{unit(datasheet)} \\
+    m_{noble} = f(\Delta v) \curvearrowright \textnormal{iterated} \\
+    m_{solar\textnormal{+}} = 0.0758 \cdot P_{el} \cdot 1.5^2 \\
+    S_{sys} = 1.72 
+    \end{array}
+    \label{eq:mass-elec-items}
+\end{equation*}
+
+MATLAB script Electric explained
+
+\subsection{Result}
+Here should be made the decision what propulsion type to select for which maneuver, that is summarized in Table \ref{tab:man-type}.
+
+
+
+\begin{table}[htbp]
+\centering
+\caption{Required DeltaV for Maneuvers}
+\label{tab:man-type}
+\begin{tabular}{|l|r|c|} 
+\hline
+\multicolumn{1}{|c|}{\textbf{Maneuver Name}} & \multicolumn{1}{c|}{\textbf{ Propulsion Type}} & \textbf{Total $\Delta  v$ [m/s]}    \\ 
+\hline
+MatchC3                                      & Bi-Propellant                                  & \multirow{5}{*}{1761.540}  \\ 
+\cline{1-2}
+TMI                                          & Bi-Propellant                                  &                            \\ 
+\cline{1-2}
+MOI                                          & Bi-Propellant                                  &                            \\ 
+\cline{1-2}
+MatchPlane                                   & Bi-Propellant                                  &                            \\ 
+\cline{1-2}
+RaisePeri                                    & Bi-Propellant                                  &                            \\ 
+\hline
+ParkingInsertion                             & Electrical                                     & \multirow{3}{*}{1413.044}         \\ 
+\cline{1-2}
+LowerApo                                     & Electrical                                     &                                  \\ 
+\cline{1-2}
+EOL                                          & Electrical                                     &                                  \\
+\hline
+\end{tabular}
+\end{table}
+
+
+\section{Electric System Design}
+selecting parts (Thuster, Tank, PSU) for electric prop system and present structure diagram.
+
+\section{Spacecraft Layout Design}
+3D model?
+
+
+\newpage
+\section{First Iteration}
+In this first iteration, it shall be shown, that certain concepts are valid to be investigated further in the following iterations. With the help of a script, calculating a rough $\Delta v$-, mass-, propulsion- and propellant budget, a resulting wet mass can be calculated step-wise. If the resulting wet mass of the spacecraft in addition to the payload adapter is lower than the recommended launch mass of the Ariane 62 to an escape trajectory, depicted in [...], the main criteria is fulfilled. In this case, a total mass lower than 2600kg is acceptable.    
+
+\subsection{$\Delta v$-budget}
+The $\Delta v$ budget takes already the capabilities of the Ariane 62 rocket into account. Therefore it shall be assumed, that the starting point of the budget is on an outgoing hyperbola from Earth with an excess velocity $v_{\infty,Earth1} = 2500\frac{m}{s}$, as depicted in [..]. In the chosen time frame of 2026, it can be shown, that the minimal necessary hyperbolic exit velocity at infinity to reach the Martian system should be around $v_{\infty,Earth2} = 2988 \frac{m}{s}$ [...]. This velocity can be acquired if the square root of the desired $C3-energy$ is taken. The difference between these two numbers gives the first $\Delta v$. It shall be assumed, that the transit to the Martian system is disturbance-free. Therefore, the next point of interest is the entry point in the Martian system. The corresponding incoming hyperbolic velocity is also given in [...] with $v_{\infty,Mars} = 3261 \frac{m}{s}$. It shall be assumed, that the eccentricity of the incoming hyperbola is exactly chosen to reach the desired periapsis height around Mars. This is namely the dedicated point where the spacecraft would intersect with Phobos on its hyperbolic trajectory. As soon as this point is reached, a second maneuver shall be performed. Because the orbital plane of Mars is inclined by $i_{Mars} = 25.19 deg$ [...] relative to the heliocentric plane in which the hyperbolic orbit was performed, an inclination change has to be taken into account besides the circularization and capturing maneuver around Mars. Both maneuvers shall be performed in parallel with the following equation \ref{eq:1}.
+
+\begin{equation}
+    \Delta v = \sqrt{v_{Peri,Hyperbola}^{2}+v_{Peri,Phobos}^{2}-v_{Peri,Hyperbola}*v_{Peri,Phobos}*cos(\Delta i)}
+    \label{eq:1}
+\end{equation}
+
+
+Because the orbit of Phobos in itself is inclined by $i_{Mars} = 0.046 deg$ [...] relative to the Martian equator, only the difference between these two inclination values $\Delta i$ has to be changed. To calculate the periapsis-velocity of the hyperbola, the following equation \ref{eq:2} can be used, which is in principle the Vis-Viva equation. For the calculation of the desired velocity at Phobos to achieve the quasi-satellite orbit, the standard Vis-Viva equation \ref{eq:3} can be used.
+
+\begin{equation}
+    v_{Peri,Hyperbola} =\sqrt{\frac{2*\mu_{_Mars}}{r_{Peri,Phobos}}+v_{\infty,Mars}^2}
+    \label{eq:2}
+\end{equation}
+
+\begin{equation}
+    v_{Peri,Phobos} =\sqrt{\mu_{_Mars}*(\frac{2}{r_{Peri,Phobos}}-\frac{1}{a_{Phobos}})}
+    \label{eq:3}
+\end{equation}
+
+As the desired Phobos quasi-satellite orbit around Mars is reached, orbital maintenance and station-keeping have to be taken into account. Here a linear modeling approach shall be used in the first approximation. This equation \ref{eq:4} is derived from the following paper [...] and relates to the amount of $\Delta v$ needed per day in the Phobos quasi-satellite orbit.
+
+\begin{equation}
+    \Delta v = N * \frac{1.16 \frac{m}{s}}{8.23 days}
+    \label{eq:4}
+\end{equation}
+
+In the last mission phase, an end-of-life maneuver shall be performed. The requirements states, that the periapsis height shall be lowered to 40 km above the Martian surface. For this maneuver, a $\Delta v = 574 \frac{m}{s}$ is needed in order to perform the Hohmann-transfer.
+
+\subsection{Mass-and Propellant-budget}
+While the $\Delta v$-budget is a mass-independent mission requirement and therefore only needs to be calculated once, the mass- and propulsion-budgets are not. At first, the mass budget is calculating a dry mass which is then fed back into the propellant calculation. Here the dry mass of every subsystem is either calculated or taken from the mission requirements [...]. By choosing a propulsion system for each maneuver, the new wet mass can be calculated via the rocket equation \ref{eq:5}. The sum of the propellant for each maneuver, in addition to the systems dry mass, gives the total wet mass. This, together with the Ariane payload adapter, has to be compared with the Ariane 62 launch specifications in order to get a first estimation about if the concept is working in terms of mass or not.
+
+\begin{equation}
+    m_{wet} = m_{dry} * e^{\Delta v/(g_{0}*Isp)}
+    \label{eq:5}
+\end{equation}
+
+\subsection{Propulsion-budget}
+In this budget, the dry mass of the propulsion subsystem shall be calculated in more detail an fed back to the overall mass budget. This is of additional interest because the propulsion system interlinks the rocket equation via the Isp and the resulting propellant mass as well as its dry mass itself. Therefore it is crucial to pin down and calculate the propulsion system on its own. Especially this presented self dependence leads to an iterative approach of these budgets. The ability to let the budgets converge via a script is hereby choosen over a spreadsheet. 

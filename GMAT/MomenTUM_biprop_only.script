@@ -8,7 +8,7 @@
 
 Create Moon Phobos;
 GMAT Phobos.NAIFId = 401;
-GMAT Phobos.OrbitSpiceKernelName = {'C:\TUM\Spacecraft Propulsion\mar085.bsp'};
+GMAT Phobos.OrbitSpiceKernelName = {'.\res\mar085.bsp'};
 GMAT Phobos.OrbitColor = Tan;
 GMAT Phobos.TargetColor = DarkGray;
 GMAT Phobos.EquatorialRadius = 13.5;
@@ -24,7 +24,7 @@ GMAT Phobos.SpinAxisDECConstant = 90;
 GMAT Phobos.SpinAxisDECRate = -0.5570000000000001;
 GMAT Phobos.RotationConstant = 190.147;
 GMAT Phobos.RotationRate = 360.9856235;
-GMAT Phobos.TextureMapFileName = 'C:\TUM\Spacecraft Propulsion\Phobos_map.jpg';
+GMAT Phobos.TextureMapFileName = '.\res\Phobos_map.jpg';
 GMAT Phobos.3DModelFile = '';
 GMAT Phobos.3DModelOffsetX = 0;
 GMAT Phobos.3DModelOffsetY = 0;
@@ -36,7 +36,7 @@ GMAT Phobos.3DModelScale = 10;
 
 Create Moon Deimos;
 GMAT Deimos.NAIFId = 402;
-GMAT Deimos.OrbitSpiceKernelName = {'C:\TUM\Spacecraft Propulsion\mar085.bsp'};
+GMAT Deimos.OrbitSpiceKernelName = {'.\res\mar085.bsp'};
 GMAT Deimos.OrbitColor = Tan;
 GMAT Deimos.TargetColor = DarkGray;
 GMAT Deimos.EquatorialRadius = 7.5;
@@ -807,7 +807,7 @@ GMAT GroundTrackPlot1.NumPointsToRedraw = 0;
 GMAT GroundTrackPlot1.ShowPlot = true;
 GMAT GroundTrackPlot1.MaxPlotPoints = 300;
 GMAT GroundTrackPlot1.CentralBody = Phobos;
-GMAT GroundTrackPlot1.TextureMap = 'C:\TUM\Spacecraft Propulsion\Phobos_map.jpg';
+GMAT GroundTrackPlot1.TextureMap = '.\res\Phobos_map.jpg';
 
 Create XYPlot DistancePho;
 GMAT DistancePho.SolverIterations = Current;

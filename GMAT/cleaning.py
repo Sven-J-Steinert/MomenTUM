@@ -19,3 +19,10 @@ with open('result/result_clean.txt', 'w') as f:
 
 print('done.')
 input('Press any key to exit.')
+
+# open result_clean.txt
+
+import os
+import pathlib
+
+os.startfile(f'{pathlib.Path().resolve()}/result/result_clean.txt') 

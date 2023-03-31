@@ -1,20 +1,37 @@
 import pandas as pd
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 import plotly.express as px
 
-# convert to csv
+fig = make_subplots(rows=2, cols=1)
 
-with open('result/RMAG_phobos.txt', 'r') as f:
-    text = f.read()
+# plotting Mars.Altitude
 
-# replace all occurrences of "         " with ","
-modified_text = text.replace('         ', ',').replace('      ',',').replace(',,',',')
+df = pd.read_csv('result/RMAG_mars.txt')
+df = df[900:-49190] # slicing section near mars
 
-with open('result/RMAG_phobos.csv', 'w') as f:
-    f.write(modified_text)
+fig.add_trace(go.Scatter(x=df['MomenTUM.A1ModJulian'], y=df['MomenTUM.Mars.Altitude'], name='Altitude Mars'), row=1, col=1)
 
-# plotting
+# plotting RMAG_phobos
 
-df = pd.read_csv('result/RMAG_phobos.csv')
+df = pd.read_csv('result/RMAG_phobos.txt')
+df = df[36650:-8650] # slicing section around phobos
 
-fig = px.line(df, x = 'MomenTUM.A1ModJulian', y = 'MomenTUM.Phobos.RMAG', title='Mission Timeline')
+fig.add_trace(go.Scatter(x=df['MomenTUM.A1ModJulian'], y=df['MomenTUM.Phobos.RMAG'], name='RMAG Phobos', line=dict(color='black')), row=2, col=1)
+
+# show plot
+
+
+fig.update_layout(
+
+    legend=dict(
+        x=1,
+        y=1,
+        bgcolor='rgba(255, 255, 255, 1)',
+        bordercolor='rgba(0, 0, 0, 0)'
+    ),
+    xaxis_title="Time [ModJulian]",
+    yaxis_title="distance [km]"
+)
+
 fig.show()

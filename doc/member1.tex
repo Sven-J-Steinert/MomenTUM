@@ -1,0 +1,109 @@
+\section{Individual Work - Beatriz Mas Sanz}
+
+\subsection{Project Plan and Requirements Definition}
+During the very initial development stages, it was important to align the core objectives of the space propulsion system design and the steps to achieve them.
+\subsubsection{Requirements Definition}
+The mission requirements (Table \ref{tab:mis-req}) and the main propulsion system requirements (Table \ref{tab:sys-req}) were mostly derived from the design challenge and were validated against every iteration performed to develop the system \cite{Manfletti.2022}. Some additional requirements were added regarding the origin of the components and their technology readiness level. By using components with TRL9, the risk of failure or incomplete development, is minimized. The preference for European components was set as a requirement for the following reasons: 
+\begin{itemize}
+    \item Compatibility: By using components from the same region, compatibility issues may be minimized.
+    \item Regulations: Certain components from outside of Europe are subject to export controls or import restrictions.
+    \item Support: using European suppliers, the production team will have easier access to technical support during the system manufacturing and testing process.
+\end{itemize}
+Additionally, this project can be a way to showcase European technology and expertise, and to support European industries and jobs.
+
+The main design driver was selected to be the launch mass, not only due to the decisive constraint of 2600 kg set by the Ariane 62 launcher, but also to maximize the benefit of every kilogram sent to space. The overall cost of the propulsion system was not assessed, due to the lack of information found about the components costs. 
+Regarding more detailed subsystem requirements, the ECSS Standard for Propulsion General Requirements was reviewed to select the applicable requirements \cite{ECSSEST385:online}. Most of these requirements are too detailed for this early stage of conceptual development, but they provided a relevant overview of what aspects needed to be considered: global performance, subsystem sizing, imbalances, contamination and cleanliness or leak tightness, to name a few.
+
+\subsubsection{Project Plan}
+Once the mission objectives were defined, Figure \ref{fig:pr-plan} shows the project plan. The main use of this plan was to have an estimation of how much time was available for each phase, considering the reduced time frame to achieve the final objectives. 
+
+\subsection{Propulsion System Trade-offs}
+\subsubsection{Pairwise Comparison and Utility Analysis}
+
+At the point of development where the type of propulsion system was still unclear, a pairwise comparison and utility analysis was the methodology used to compare the different options in combination with the mass estimation script: \href{https://github.com/Sven-J-Steinert/MomenTUM/blob/main/MATLAB/mass_design.m}{\colorbox{codegray}{mass\_design.py}}. Several relevant criteria were defined to evaluate the different options \cite{DesignTradeoffs}. These criteria include:
+\begin{itemize}
+    \item Launch mass (MIS.003)
+    \item Volume propulsion system (MIS.002)
+    \item Power Requirement (MIS.005)
+    \item Industrialization (CPROP.006)
+    \item Technological Risk (CPROP.007)
+    \item Propellant Toxicity (CPROP.003)
+\end{itemize}	
+
+The selection and weighing of the criteria was derived from the defined system requirements. Each criterion was assigned a weighing factor using a pairwise comparison. The resulting weights correspond to the design philosophy of the project: launch mass is the most important criterion, followed by industrialization, as depicted in Figure \ref{fig:cr-def}. This trade-off was performed between four different propulsion systems: bipropellant only or bipropellant-electric propulsion from European or US suppliers. The American thrusters considered were Aerojet Rocketdyne R-4D-15 HiPAT™ (bipropellant) and NASA’s NEXT-C Thruster (electric). For the European options Ariane Group S400-12 apogee engine (bipropellant) and Ariane Group Radio Frequency Ion Thruster RIT 10 EVO were considered. Each concept was evaluated for each criterion and the utility analysis shown in Figure \ref{fig:par-an} resulted in the overall concept selection of a bipropellant-electric propulsion system from European suppliers.
+
+A validity check was performed on the objectivity of the evaluation method by removing the worst concept or the least important criteria and proving that the winning concept remains the same in both scenarios. 
+
+\subsubsection{Chemical System Tank Configuration Trade-off Script}
+The objective of the Tank Configuration MATLAB Script was to optimise the number of MMH and MON tanks with regards to the system mass. Given the initial estimations for propellant volumes and the tanks available from both Ariane Group and MT Aerospace, different configurations were considered. The detailed tank selection for each assessed configuration is depicted in section \ref{subsection:ChemSysTradeOff}. The additional helium required to fill the ullage volume in the propellant tank is also calculated and compared to ensure that the mass saved with a bigger tank is not regained as wet mass.
+\subsection{Pressurant Tank Sizing Script}
+The \href{https://github.com/Sven-J-Steinert/MomenTUM/blob/main/MATLAB/pressure_temp_sim.m}{\colorbox{codegray}{pressure\_temp\_sim.m}} script was developed based on the calculations presented by NESC Academy in their online lesson for Bottle Blow-Down analysis \cite{BottleBl30:online} and it was adapted to the needs and conditions of this concept development. The script is structured as follows:
+\subsubsection{Inputs from Mission Analysis}
+The inputs necessary for the pressure script calculation come from mission analysis. GMAT provides the propellant mass necessary per maneuver and the maneuver durations. These values are extracted by the script from a \href{https://github.com/Sven-J-Steinert/MomenTUM/blob/main/MATLAB/GMAT_values_20.xlsx}{\colorbox{codegray}{.xlsx}} file derived from the GMAT output \href{https://github.com/Sven-J-Steinert/MomenTUM/blob/main/GMAT/result/result_clean.txt}{\colorbox{codegray}{result\_clean.txt}}.
+\subsubsection{Inputs from System Architecture}
+Further inputs required for the calculation come from the tank and propellant selection. Specifically, these inputs entail the volume of the selected propellant and pressurant tanks, their mean operating pressures and the density of the propellants. The freezing and boiling temperatures and vapor pressure of the propellants are not required for the calculations. Nevertheless, they shall be considered  when analyzing the results, to make sure the propellants stays out of the critical conditions. 
+\subsubsection{Definition of initial state of helium in every tank and boundary conditions}
+Helium is initially stored within the helium tank at a pressure of 310 bars and it is pre-heated to 50 ºC before the first maneuver. The selection of the initial conditions traces back to the tank specification: the initial pressure is the tank's MEOP and the temperature is 10 ºC below the maximum allowable tank temperature (Table \ref{tab:pre-tan}). Regarding the conditions in the propellant tanks, the pressure is kept constant at 20 bars by the pressure regulator and the initial temperature is set to ambient temperature (20 ºC). The assumption of a 20 bar pressure in the propellant tanks, is an estimation calculated by adding the known pressure drops over the selected valves and adding additional 0.25 bars for the piping. However, this assumption is yet to be validated.
+\subsubsection{Heat Load selection}
+The heat flow required during maneuvers to prevent the temperature of helium from falling below 20 ºC is set as an input for the calculation. However, it needs to be iterated manually in case this condition is not fulfiled. With respect to heating up in between maneuvers, it is also iterated manually by setting the target temperatures after the waiting times between TCM and MOI maneuvers and between MOI and Match INC. In the final iteration, these temperatures are set to 50 ºC and 20 ºC respectively. 
+\subsubsection{Iterative calculations for each maneuver and waiting times}
+Firstly, an initial approximation of the temperature of helium when reaching the propellant tanks is calculated. This calculation considers the temperature increase of helium over the pressure regulator due to the Joule Thomson effect \(\Delta T_{Maneuver}\) \cite{Mage1965} as shown in Equation \ref{eq:JTEffect}, where \(p_{HePropTank}-p_{HeHeTank}\) is the pressure drop over the pressure regulator and the Joule Thomson coefficient for Helium is \(\mu=-0.06  K/bar\) \cite{Mage1965}. This approximation assumes that neither pressure nor temperature change within the helium tank during the maneuver. 
+\begin{equation}
+ \Delta T_{Maneuver} = \mu \cdot (p_{HePropTank}-p_{HeHeTank})
+\label{eq:JTEffect}
+\end{equation}
+Secondly, the amount of helium required per maneuver is calculated iteratively. How much helium is required to fill the volume in the propellant tanks left free by the consumed propellants depends on the density of the helium under the conditions in the propellant tank. However, the propellant tank conditions at the end of the maneuver are dependant on the conditions of the pressurant tank at the end of the maneuver, which again depend on the amount of helium required for the maneuver. This co-dependence explains the performed iteration. During this iteration,the temperature of helium within the propellant tanks \(T_{HePrT2}\) is calculated as the equilibrium temperature between the helium that is already in the propellant tank \(m_{HePrT}\cdot T_{HePrT1}\) and the incoming helium from the pressure regulator \(m_{HeMan}\cdot T_{HePR}\). 
+\begin{equation}
+    T_{HePrT2} =
+    \frac{m_{HePropT}\cdot T_{HePrT1}+m_{HeMan}\cdot T_{HePR}}{m_{HePrT}+m_{HeMan}}
+\label{eq:TempHeProp}
+\end{equation}
+Using the final equilibrium temperature \(T_{HePropTank2}\) the density of helium within the propellant tanks is defined and finally the required helium mass to fill the required volume each maneuver.
+The amount of helium required per maneuver defined the helium mass flow which enables the calculation of the helium status within the helium tank at the end of the maneuver. The changes of helium conditions over the maneuvers are neither isothermal nor adiabatic processes, so the first thermodynamic equation is used to calculate the change in the internal energy of the gas \cite{BottleBl30:online}. Equation \ref{eq:IntEnHe} exemplifies the calculation of the internal energy of helium after a maneuver \(U_{He2}\). It depends on the internal energy before the maneuver \(U_{He1}\), the maneuver duration \(t_{Man}\), the heat load applied during the maneuver \(\dot{Q}_{Man}\), the enthalpy of the helium leaving the tank \(H_{He1}\) and its mass flow \(\dot{m}_{HeMan}\) \cite{BottleBl30:online}. Thereafter, the Coolprop database \cite{CoolProp} is integrated to the script to calculate the pressure and temperature of helium based on its internal energy and density, hence considering helium a real gas.
+\begin{equation}
+    U_{He2} = U_{He1}+t_{Man}\cdot (\dot{Q}_{Man}-H_{He1}\cdot \dot{m}_{HeMan})
+\label{eq:IntEnHe}
+\end{equation}
+At this point, the pressure and temperature of helium after a maneuver has been calculated, so the initial assumption of constant conditions in the pressurant tank can be corrected. The whole calculation is repeated again averaging the temperature increase over the pressure regulator with the initial and final pressure in the helium tank. Table \ref{tab:he-temp} represents the results for intermediate calculations of the helium temperatures at different stages. 
+\begin{table}[H]
+\centering
+\caption{Helium Temperature}
+\label{tab:he-temp}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{|l|r|r|r|l} 
+{\cellcolor[rgb]{0.773,0.859,0.941}}                                 & \multicolumn{1}{c|}{{\cellcolor[rgb]{0.773,0.855,0.941}}{[}ºC]}                                                                                                                      & \multicolumn{1}{c|}{{\cellcolor[rgb]{0.773,0.855,0.941}}{[}ºC]}                                                                                                                                   & \multicolumn{1}{c|}{{\cellcolor[rgb]{0.773,0.855,0.941}}{[}ºC]}                                                                                                                                    &                    \\ 
+{\cellcolor[rgb]{0.773,0.859,0.941}}\textbf{\textbf{Maneuver Name}} & \multicolumn{1}{c|}{{\cellcolor[rgb]{0.773,0.851,0.941}}\begin{tabular}[c]{@{}>{\cellcolor[rgb]{0.773,0.851,0.941}}c@{}}\textbf{Temperature }\\\textbf{in Helium Tank}\end{tabular}} & \multicolumn{1}{c|}{{\cellcolor[rgb]{0.773,0.851,0.941}}\begin{tabular}[c]{@{}>{\cellcolor[rgb]{0.773,0.851,0.941}}c@{}}\textbf{Joule-Thomson }\\\textbf{Avg. Temperature Increase}\end{tabular}} & \multicolumn{1}{c|}{{\cellcolor[rgb]{0.773,0.851,0.941}}\begin{tabular}[c]{@{}>{\cellcolor[rgb]{0.773,0.851,0.941}}c@{}}\textbf{Avg. Temperature reaching}\\\textbf{Propellant Tank}\end{tabular}} &                    \\ 
+\cline{1-4}
+\multirow{2}{*}{C3}                                                  & 50.000                                                                                                                                                                               & \multirow{2}{*}{13.407}                                                                                                                                                                           & \multirow{2}{*}{29.569}                                                                                                                                                                            & \multirow{2}{*}{}  \\
+                                                                     & -17.676                                                                                                                                                                              &                                                                                                                                                                                                   &                                                                                                                                                                                                    &                    \\ 
+\cline{1-4}
+\multirow{2}{*}{TCM}                                                 & -17.676                                                                                                                                                                              & \multirow{2}{*}{9.404}                                                                                                                                                                            & \multirow{2}{*}{-8.369}                                                                                                                                                                            & \multirow{2}{*}{}  \\
+                                                                     & -17.869                                                                                                                                                                              &                                                                                                                                                                                                   &                                                                                                                                                                                                    &                    \\ 
+\cline{1-4}
+\multirow{2}{*}{MOI}                                                 & 50.000                                                                                                                                                                               & \multirow{2}{*}{7.866}                                                                                                                                                                            & \multirow{2}{*}{25.470}                                                                                                                                                                            & \multirow{2}{*}{}  \\
+                                                                     & -14.791                                                                                                                                                                              &                                                                                                                                                                                                   &                                                                                                                                                                                                    &                    \\ 
+\cline{1-4}
+\multirow{2}{*}{Match INC}                                           & 20.000                                                                                                                                                                               & \multirow{2}{*}{4.111}                                                                                                                                                                            & \multirow{2}{*}{22.304}                                                                                                                                                                            & \multirow{2}{*}{}  \\
+                                                                     & 16.387                                                                                                                                                                               &                                                                                                                                                                                                   &                                                                                                                                                                                                    &                    \\ 
+\cline{1-4}
+\multirow{2}{*}{Raise Peri min}                                      & 16.387                                                                                                                                                                               & \multirow{2}{*}{4.020}                                                                                                                                                                            & \multirow{2}{*}{20.215}                                                                                                                                                                            & \multirow{2}{*}{}  \\
+                                                                     & 16.004                                                                                                                                                                               &                                                                                                                                                                                                   &                                                                                                                                                                                                    &                    \\
+\cline{1-4}
+\end{tabular}
+}
+\end{table}
+
+Consequently new values for the required helium per maneuver and condition changes are obtained, that lead to the final results per maneuver.
+Two waiting times are also considered in the script, where the conditions of helium in the pressurant tank change due to the temperature increase induced by the electric heater in the tank.
+\subsubsection{Results Display}
+One of the most important results of this script are the amount of helium required in total, since it directly influences the launch mass; and the amount of helium required for the maneuvers, since it defines the size of the pressurant tanks.
+Furthermore, the filling level, pressure and temperature changes of helium within the pressurant tank throughout the maneuvering time are displayed. These demonstrate there is enough helium for all maneuvers and enough remaining helium to operate the RCS thrusters, and its pressure and temperature conditions fulfil the objectives described in Section \ref{subsection:PressCalc}.  
+
+
+
+
+
+
+
+
+

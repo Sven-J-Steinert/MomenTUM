@@ -1,0 +1,1328 @@
+\documentclass[conference]{IEEEtran}
+
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{multirow}
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage{float}
+\usepackage[normalem]{ulem}
+\usepackage{pdfpages}
+\usepackage{pdflscape}
+\usepackage{rotating}
+
+
+
+\usepackage{color}
+\usepackage{tabularray}
+\definecolor{Cornflower}{rgb}{0.552,0.705,0.882}
+\definecolor{Spindle}{rgb}{0.772,0.85,0.941}
+\definecolor{FairPink}{rgb}{1,0.917,0.917}
+\definecolor{HintofGreen}{rgb}{0.925,1,0.956}
+\definecolor{Cream}{rgb}{1,0.992,0.807}
+\definecolor{BabyBlue}{rgb}{0.87,1,1}
+\definecolor{codegray}{gray}{0.9}
+\usepackage{colortbl}
+
+
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\begin{document}
+
+
+
+\title{Spacecraft Propulsion and Design Challenge \\ Phobos Orbiter Mission Design: MomenTUM}
+
+\author{\IEEEauthorblockN{1\textsuperscript{st} Beatriz Mas Sanz}
+\IEEEauthorblockA{\textit{Chair of Space Propulsion and Mobility } \\
+\textit{Technical University of Munich}\\
+Munich, Germany \\
+ge86san@mytum.de}
+\and
+\IEEEauthorblockN{2\textsuperscript{nd} Marta Pelivan}
+\IEEEauthorblockA{\textit{Chair of Space Propulsion and Mobility } \\
+\textit{Technical University of Munich}\\
+Munich, Germany \\
+marta.pelivan@tum.de}
+\and
+\IEEEauthorblockN{3\textsuperscript{rd} Julian Schmid}
+\IEEEauthorblockA{\textit{Chair of Space Propulsion and Mobility } \\
+\textit{Technical University of Munich}\\
+Munich, Germany \\
+juli.schmid@tum.de}
+\and
+\IEEEauthorblockN{4\textsuperscript{th} Sven J. Steinert}
+\IEEEauthorblockA{\textit{Chair of Space Propulsion and Mobility } \\
+\textit{Technical University of Munich}\\
+Munich, Germany \\
+\href{https://orcid.org/0000-0003-4424-670X}{0000-0003-4424-670X}}
+
+}
+
+\maketitle
+
+\thispagestyle{plain}
+\pagestyle{plain}
+
+\begin{abstract}
+The target of this design challenge is, to develop a propulsion system concept that can provide the sufficient performance to send a spacecraft to Phobos with an Ariane 62 rocket as its launch system. For this, different concepts are compared in a variety of trade-offs. Finally, a system that uses a bipropellant as well as an electric propulsion system is chosen and worked out in detail to prove, that this concept can satisfy the given requirements of the launcher, the mission and the propulsion system itself. 
+
+\end{abstract}
+
+\begin{IEEEkeywords}
+Mars, Phobos, quasi-satellite orbit, bipropellant, chemical propulsion, electrical propulsion
+\end{IEEEkeywords}
+
+\section{Introduction}
+The study presented in this report focuses on the preliminary design of the propulsion system for a proposed mission to Phobos, one of the moons of Mars. The primary objective of this mission is to study the origin, together with the physical and chemical composition of Phobos, through the deployment of a surface probe.
+
+The feasibility of the mission will be ensured by designing a propulsion system that can safely and efficiently transport the spacecraft to Phobos, maintain a Quasi-Satellite Orbit (QSO) around the moon for a minimum of two years, and provide sufficient power and propulsion for the surface probe to conduct its scientific experiments. The spacecraft is planned to be launched on a dedicated Ariane 62 rocket from Kourou between 2026-2029, and it will be de-orbited into the Martian atmosphere at the end of its mission.
+
+The report will begin by describing the trajectory to reach Phobos. This will be followed by the presentation of the proposed concept for the propulsion system, along with a detailed explanation of the trade-offs leading to the final concept, its components and how it addresses the challenges of the mission.
+
+Overall, the study performed in this report aims to present a feasible preliminary design that can help ensure the success of the mission.
+\newpage
+
+\section{Workflow} 
+
+
+
+In this section, the workflow design process of the spacecraft and specifically the spacecraft propulsion system is introduced. This is shown in Figure \ref{fig:flow-work}. In it, a continuous iteration process is presented to ensure, that an optimized spacecraft configuration can be reached. The main mechanism in this process is a closed loop between the mission analysis software General Mission Analysis Tool (GMAT) and the self-developed MATLAB (The Mathworks, Inc.) scripts  \href{https://github.com/Sven-J-Steinert/MomenTUM/blob/main/MATLAB/dV_calc.m}{\colorbox{codegray}{dV\_calc.m}}, \href{https://github.com/Sven-J-Steinert/MomenTUM/blob/main/MATLAB/mass_design.m}{\colorbox{codegray}{mass\_design.py}} and \href{https://github.com/Sven-J-Steinert/MomenTUM/blob/main/MATLAB/pressure_temp_sim.m}{\colorbox{codegray}{pressure\_temp\_sim.m}}. Results, such as a propulsion subsystem schematic, technical drawings of the system and different budgets for mass, propellant and delta v can be drawn from this process.
+
+
+\begin{figure*}[h]
+  \centering
+  \includegraphics[width=0.8\textwidth]{img/work_flow.pdf}
+  \caption{Flowchart of workflow}
+  \label{fig:flow-work}
+\end{figure*}
+
+\subsection{GMAT}
+
+The General Mission Analysis Tool (GMAT) is used to compute the trajectory and simulate the mission in space and time.
+Hereby the mission was first implemented impulsive, then with finite chemical burns and ultimately with additional  finite electric burns in \href{https://github.com/Sven-J-Steinert/MomenTUM/blob/main/GMAT/MomenTUM_finite.script}{\colorbox{codegray}{MomenTUM\_finite.script}}.
+As an output of this simulation, a result file \href{https://github.com/Sven-J-Steinert/MomenTUM/blob/main/GMAT/result/result.txt}{\colorbox{codegray}{result.txt}} is created, holding certain events by their timestamp and fuel level as well as burn-times and key-variables of the mission. This rather long file is shortened to the most important lines by a small script \href{https://github.com/Sven-J-Steinert/MomenTUM/blob/main/GMAT/cleaning.py}{\colorbox{codegray}{cleaning.py}} into \href{https://github.com/Sven-J-Steinert/MomenTUM/blob/main/GMAT/result/result_clean.txt}{\colorbox{codegray}{result\_clean.txt}}. Additionally the distance to Phobos is outputted by GMAT and plotted by 
+\href{https://github.com/Sven-J-Steinert/MomenTUM/blob/main/GMAT/plot.py}{\colorbox{codegray}{plot.py}}.
+
+
+\subsection{dv Script}
+
+The delta v script \href{https://github.com/Sven-J-Steinert/MomenTUM/blob/main/MATLAB/dV_calc.m}{\colorbox{codegray}{dV\_calc.m}} is a program written in MATLAB. It's function is to take a given spacecraft dry mass, as well as the thrust and ISP of the engine used in the maneuvers, together with the dedicated burn-times from GMAT per maneuver. These values are then transformed into the respective delta v and propellant mass of each maneuver via the Tsiolkovsky rocket equation \cite{Walter.2018}.
+
+\subsection{Mass Budget Script}
+\label{script:mass-design}
+
+To compute the launch mass of the spacecraft as well as the solar array size and the engine performance data, a mass budget script \href{https://github.com/Sven-J-Steinert/MomenTUM/blob/main/MATLAB/mass_design.m}{\colorbox{codegray}{mass\_design.py}}, written in MATLAB, is used. Here, the delta v's and the pressurant mass are needed as an input, while especially the spacecraft dry mass and engine performance is inserted back into GMAT as an output of this script. In this script, the ESA margin philosophy \cite{ESA.2012} is respected.
+
+\subsection{Pressure Script}
+
+The amount of pressurant required for the mission is calculated using the MATLAB pressure script \href{https://github.com/Sven-J-Steinert/MomenTUM/blob/main/MATLAB/pressure_temp_sim.m}{\colorbox{codegray}{pressure\_temp\_sim.m}}. The required inputs for the tool are the \href{https://github.com/Sven-J-Steinert/MomenTUM/blob/main/GMAT/result/result_clean.txt}{\colorbox{codegray}{result\_clean.txt}} file coming from GMAT transformed to a \href{https://github.com/Sven-J-Steinert/MomenTUM/blob/main/MATLAB/GMAT_values_20.xlsx}{\colorbox{codegray}{.xlsx}} file, as well as the pressurant and propellant tank characteristics (volumes and mean operating pressures). The outputs of this script are:
+\begin{itemize}
+    \item the total helium mass within the whole system at the beginning of operation, which is fed back to GMAT.
+    \item the amount of helium within both pressurant and propellant tanks throughout the maneuvers.
+    \item the pressure and temperature changes of helium within the pressurant and propellant tanks during the maneuvering time.
+\end{itemize}
+
+
+\subsection{Arrangement Analysis Script}
+
+The spacecraft's configuration is determined by the arrangement analysis script \href{https://github.com/Sven-J-Steinert/MomenTUM/blob/main/MATLAB/arrangement_analysis.m}{\colorbox{codegray}{arrangement\_analysis.m}}, written in MATLAB. In this script, the orbital stability criteria for the spacecraft are matched with the spacecrafts geometrical layout and placement of the individual internal parts. This then results in a shape which directly influences the placement of the reaction control system (RCS). By the correct placement of the RCS thrusters, a combined main-engine placement offset and misalignment can be compensated, resulting in a resilient spacecraft design. A 3D model can then be derived from this configuration and fed back to indicate if the internal parts fit within the restricted volume. The spacecraft's volume, the shifting center of gravity (CoG) and the moments of inertia are an output of this analysis which can then be compared to the requirements of the launch vehicle \cite{Arianspace.2016}. 
+
+\section{Mission Analysis and Overall Spacecraft}
+\subsection{Mission Requirements}
+
+The mission requirements form the baseline of the design process and are directly given in the design challenge \cite{Manfletti.2022}.
+
+\begin{table}[H]
+\centering
+\caption{Mission Requirements \cite{Manfletti.2022}}
+\label{tab:mis-req}
+\begin{tblr}{
+  row{1} = {Cornflower},
+  row{2} = {Spindle},
+  hlines,
+  vline{1,3} = {1}{},
+  vline{-} = {2-8}{},
+}
+                 & \textbf{Mission Requirements}                                                                                                                                                                     \\
+\textbf{Req. ID} & \textbf{Statement}                                                                                                                                                                                \\
+MIS.001          & {The system shall send a satellite to Phobos which will \\release a surface probe to Phobos ,one of the moons \\of Mars, to study its origin as well as its physical and \\chemical composition.} \\
+MIS.002          & {The satellite shall be launched by a dedicated \\Ariane 62}                                                                                                                                      \\
+MIS.003          & The total system mass shall not exceed 2600 kg.                                                                                                                                                   \\
+MIS.004          & The launch date shall lay between 2026 and 2029.                                                                                                                                                  \\
+MIS.005          & {The system shall reach an orbit around Phobos \\(Quasi-Satellite Orbit (QSO)) for a minimum of \\2 years to study Phobos from space and to serve \\as a relay for the surface probe.}            \\
+MIS.006          & {At end of life (EOL) the spacecraft shall be \\de-orbited into the martian atmosphere (40km \\altitude at periapsis).}                                                                           
+\end{tblr}
+\end{table}
+
+\subsection{Basic Mission Trajectory}
+For a transit to Mars, multiple launch windows are possible within the required launch frame of 2026 to 2029 (MIS.004). The most interesting opportunities are the energy minima Type 2 transfers in 2026 \cite{Burke.2010} where the required characteristic energy (C3) and arrival excess speed are particularly low. In order to offer a safety margin in case of any delays, the second most optimal window, starting at 31.10.2026 was chosen which takes place before the most optimal one at 6.11.2026. So in a case of emergency the launch date can be prospered while still being able to fly the mission with the same hardware.
+
+The trajectory starts by its carrier, an Ariane 62 (MIS.002) and its ejection on its outgoing asymptote. However, the mission launch opportunity requires 9.144 km²/s² of C3 where the Ariane 62 can only supply a infinity velocity of 2.5 km/s (6.25 km²/s² C3). Therefore the first maneuver is performed to match the required C3, when the spacecraft is leaving the influence of earth. Next, a trajectory correction maneuver (TCM) is performed to target the arrival at Mars precisely. When arriving at Mars, a Mars orbit insertion (MOI) is performed to reduce the spacecraft access velocity to a high elliptical orbital velocity. When crossing Phobos orbital plane, an inclination change is done near to the spacecrafts apoapsis followed by a raise of its periapsis to intersect with Phobos orbit. To match the point in time where Phobos and the spacecraft align, a parking orbit is created where after one round-trip, Phobos is matched with a deceleration burn where now its orbital parameters are similar to achieve a quasi satellite orbit. For the required delta v to perform orbital maintenance, literature values for this case have been used as $\frac{1.16}{8.23}$ m/s delta v per day \cite{Chen2020} and the mission duration MIS.005 plus margin. Ultimately as MIS.006 requires, the spacecraft is deorbited into the martian atmosphere through a deceleration burn at its apoapsis. The full set of delta v magnitudes for this impulsive trajectory and its V,N,B vector components are listed in table \ref{tab:man-dv-imp} corresponding to \href{https://github.com/Sven-J-Steinert/MomenTUM/blob/main/GMAT/MomenTUM_impulsive.script}{\colorbox{codegray}{MomenTUM\_impulsive.script}}.
+
+\begin{table}[H]
+\centering
+\caption{Required DeltaV for Impulsive Maneuvers}
+\label{tab:man-dv-imp}
+\begin{tblr}{
+  column{3} = {r},
+  cell{1}{2} = {Cornflower,c},
+  cell{1}{3} = {Cornflower,c},
+  cell{1}{5} = {Cornflower,c},
+  cell{1}{6} = {Cornflower},
+  cell{1}{7} = {Cornflower},
+  cell{2}{1} = {Cream},
+  cell{2}{5} = {c},
+  cell{2}{6} = {c},
+  cell{2}{7} = {c},
+  cell{3}{1} = {Cream},
+  cell{3}{5} = {c},
+  cell{3}{6} = {c},
+  cell{3}{7} = {c},
+  cell{4}{1} = {Cream},
+  cell{4}{5} = {c},
+  cell{4}{6} = {c},
+  cell{4}{7} = {c},
+  cell{5}{1} = {Cream},
+  cell{5}{5} = {c},
+  cell{5}{6} = {c},
+  cell{5}{7} = {c},
+  cell{6}{1} = {BabyBlue},
+  cell{6}{5} = {c},
+  cell{6}{6} = {c},
+  cell{6}{7} = {c},
+  cell{7}{1} = {BabyBlue},
+  cell{7}{5} = {c},
+  cell{7}{6} = {c},
+  cell{7}{7} = {c},
+  cell{8}{1} = {BabyBlue},
+  cell{8}{5} = {c},
+  cell{8}{6} = {c},
+  cell{8}{7} = {c},
+  cell{9}{1} = {BabyBlue},
+  cell{9}{4} = {r},
+  cell{9}{5} = {c},
+  cell{9}{6} = {c},
+  cell{9}{7} = {c},
+  cell{10}{1} = {BabyBlue},
+  cell{10}{5} = {c},
+  cell{10}{6} = {c},
+  cell{10}{7} = {c},
+  cell{11}{2} = {Spindle},
+  cell{11}{3} = {Spindle},
+  vline{2-8} = {1}{},
+  vline{-} = {2-10}{},
+  vline{2-4} = {11}{},
+  hline{1} = {2-3,5-7}{},
+  hline{2-11} = {1-3,5-7}{},
+  hline{12} = {2-3}{},
+}
+  & \textbf{Maneuver Name} & \textbf{ Magn. [m/s]} &  & \textbf{V} & \textbf{N} & \textbf{B} \\
+C & Match C3               & 509.350               &  & x          &            &            \\
+C & TCM                    & 34.553                &  & x          & x          & x          \\
+C & MOI                    & 751.782               &  & x          &            &            \\
+C & Match INC              & 13.153                &  &            & x          &            \\
+E & Raise Peri             & 35.660                &  & x          &            &            \\
+E & Parking Insertion      & 197.507               &  & x          &            &            \\
+E & Match Phobos           & 640.000               &  & x          &            &            \\
+E & Orbital Maintenance    & 104.950               &  & x          & x          & x          \\
+E & EOL                    & 561.664               &  & x          &            &            \\
+  & \textbf{Total}         & \textbf{2848.619}     &  &            &            &            
+\end{tblr}
+\end{table}
+
+\subsection{Propulsion System Trade-off}
+\label{subsection:PropSysTradeOff}
+
+To analyze which propulsion system combination shall be used for this mission, the following trade-off, depicted in Table \ref{tab:prop-tradeoff} is conducted. The objective is to select the configuration with the minimum launch mass, which is calculated by the mass budget script. The mission delta v used in this comparison originates from a finite chemical implementation of the impulsive trajectory \href{https://github.com/Sven-J-Steinert/MomenTUM/blob/main/GMAT/MomenTUM_biprop_only.script}{\colorbox{codegray}{MomenTUM\_biprop\_only.script}}. The maneuvers Raise Peri to EOL are considered done electrically in a mixed system. In this analysis, if a maneuver is performed with an electric engine, the delta v is doubled because of the high uncertainty in regard to the continuous thrust maneuvers. In this simplified case, only the biprop-electric and the biprop propulsion system fulfil MIS.003 and stay below the 2600 kg capability of the launcher \cite{Arianspace.2016}. Since the biprop-electric system has the lowest launch mass and the doubling of the delta V for the electrical maneuvers is assumed conservatively high, the lightest propulsion system is expected to be the combination of a bipropellant and electric propulsion. A more detailed comparison between the bipropellant only and the biprop-electric system can be found in the Appendix \ref{Appendix}.
+
+\begin{table}[H]
+\caption{Propulsion System Trade-off}
+\label{tab:prop-tradeoff}
+\resizebox{\linewidth}{!}{%
+\begin{tblr}{
+  row{1} = {Cornflower,c},
+  row{2} = {c},
+  cell{1}{1} = {c=6}{},
+  cell{3}{2} = {r},
+  cell{3}{3} = {r},
+  cell{3}{4} = {r},
+  cell{3}{5} = {r},
+  cell{3}{6} = {r},
+  cell{4}{2} = {r},
+  cell{4}{3} = {r},
+  cell{4}{4} = {r},
+  cell{4}{5} = {r},
+  cell{4}{6} = {r},
+  hlines,
+  vlines,
+}
+\textbf{Propulsion System Trade-off} &                    &        &          &                      &          \\
+Propulsion   System                  & {Biprop\\Electric} & Biprop & Electric & {Monoprop\\Electric} & Monoprop \\
+Total Mission dV [m/s]               & 4698.2             & 3277.5 & 6555.0   & 4698.2               & 3277.5   \\
+Launch Mass [kg]                     & 2124.4             & 2128.3 & 2878.3   & 3022.8               & 6949.7   
+\end{tblr}}
+\end{table}
+
+
+
+\subsection{Advanced Mission Trajectory}
+To apply the selected bipropellant and electric system, the trajectory has to be adapted. For the bipropellant section, the general approach of maneuvers can be kept, since their burn-times are comparably short. Besides the C3 maneuver, which has no time constrains, only the MOI critically spreads over a longer range of space and time as seen in Figure \ref{fig:chem-overview}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{img/chem_overview.png}
+  \caption{Chemical maneuvers: MOI, Match INC, Raise Peri min}
+  \label{fig:chem-overview}
+\end{figure}
+
+After the inclination change and raising the periapsis to a minimum, the maneuvers are carried out by the electric propulsion in a different approach. The first electric section is the circularization of the orbit through a loop of burns by true anomaly which can be seen in figure \ref{fig:circularization} where yellow sections represent thrust arcs. The over-raise in periapsis comes for the benefit of drastically reduced flight-time and the over-raising is therefore a compromise of minimal delta v and flight-time.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{img/el_circularization.png}
+  \caption{Electric maneuver: Circularization}
+  \label{fig:circularization}
+\end{figure}
+
+From there on, the electric thruster continuously fires to spiral down and approach Phobos. The very low eccentricity of Phobos is capitalized on here, so that a matching can be achieved from a circular spiral. To match the intersection with Phobos correctly in time, the spiraling is paused (displayed green in Figure \ref{fig:spiral}) before its spiraling achieves a semi major axis of 9378.8 km and therefore a matching orbital period.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{img/el_sprial.png}
+  \caption{Electric maneuver: Spiral Down Match}
+  \label{fig:spiral}
+\end{figure}
+
+The Orbital Maintenance is assumed as in the impulsive section and its corresponding fuel mass is deducted. The EOL maneuver is also a loop of thrust arcs that decelerate the spacecrafts around its apoapsis, marked by true anomaly which can be seen in Figure \ref{fig:eol}. Hereby the assumption of 10 times the thrust equals to $\frac{1}{10}$ of the nominal burn-time was made to reduce computation time. This concludes the finite simulation of the selected bipropellant electrical system carried out in the GMAT script \href{https://github.com/Sven-J-Steinert/MomenTUM/blob/main/GMAT/MomenTUM_finite.script}{\colorbox{codegray}{MomenTUM\_finite.script}}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{img/el_eol.png}
+  \caption{Electric maneuver: EOL}
+  \label{fig:eol}
+\end{figure}
+
+\subsection{deltaV Budget}
+
+As a result of the now fully specified trajectory and its finite simulation, the maneuver delta vs and burn times are given precisely in Table \ref{tab:budget-dv} below.
+
+\begin{table}[H]
+\centering
+\caption{DeltaV Budget}
+\label{tab:budget-dv}
+\resizebox{\linewidth}{!}{%
+\begin{tblr}{
+  row{1} = {Cornflower},
+  row{2} = {Spindle},
+  row{8} = {Spindle},
+  row{13} = {Spindle},
+  row{14} = {Cornflower},
+  column{even} = {c},
+  column{3} = {r},
+  cell{1}{3} = {c},
+  cell{2}{3} = {c},
+  cell{3}{4} = {r},
+  cell{4}{4} = {r},
+  cell{5}{4} = {r},
+  cell{6}{4} = {r},
+  cell{7}{4} = {r},
+  cell{8}{4} = {r},
+  cell{9}{4} = {r},
+  cell{10}{4} = {r},
+  cell{11}{4} = {r},
+  cell{12}{4} = {r},
+  cell{13}{4} = {r},
+  cell{14}{4} = {r},
+  hlines,
+  vlines,
+}
+                       &                    & {[}m/s]           & {[}s]               \\
+\textbf{Maneuver Name} & \textbf{Type}      & \textbf{Delta v}  & \textbf{Duration}   \\
+C3                     & finite             & 516.868           & 2155.85             \\
+TCM                    & finite             & 1.395             & 5.35                \\
+MOI                    & finite             & 850.981           & 2858.31             \\
+Match INC              & finite             & 14.550            & 42.44               \\
+Raise Peri min         & finite             & 4.515             & 13.13               \\
+Total Chemical         &                    & 1388.308          & 5075.07             \\
+Circularize            & finite             & 713.753           & 10164236.2          \\
+Spiral Down Match      & finite             & 831.526           & 11334710.2          \\
+Orbital Maintenance    & stochastic         & 104.950           &                     \\
+EOL                    & finite, assumption & 708.395           & 9035872.4           \\
+Total Electric         &                    & 2358.624          & 30534818.8          \\
+\textbf{Total}         &                    & \textbf{3746.932} & \textbf{30539893.9} 
+\end{tblr}
+}
+\end{table}
+
+An more in depth overview of the mission is put together in the mission timeline in Table \ref{tab:mis-timeline} that marks all states by a timestamp and their associated spacecraft values.
+
+
+\subsection{Mass Budget}
+The mass budget of the final spacecraft is depicted in Table \ref{tab:mas-bud}. It is generated by the mass budget script and lists all subsystems and propellants with their respective masses and margins. These margins are based on the ESA margin philosophy \cite{ESA.2012}. While most subsystem masses are already fixed for the mission, the STR and PWR subsystem need to be calculated via to following equations \cite{Manfletti.2022}. Regarding the STR subsystem, Equation \ref{eq:STR} is used, while for the PWR subsystem, Equation \ref{eq:PWR} shall be applied. In case of the CPROP and EPROP subsystem, commercial parts are chosen to form the subsystems total mass. For the launch adapter, the PLA6 1194 is used which can be found in the user's manual of the Ariane 62 \cite{Arianspace.2016}. In this budget, the dry mass is stated with the integrated Phobos surface probe, which is dropped in a later mission phase. This is because the harness and structural mass has to be sized for the probe as well, which then needs to be included. As a result, the dry mass is not a constant value over the whole mission.
+
+\begin{equation}
+m_{STR} = 0.0224 \cdot m_{wet} + 27.823
+\label{eq:STR}
+\end{equation}
+
+\begin{equation}
+m_{PWR} = 0.0758 \cdot P_{Earth} + 37.741
+\label{eq:PWR}
+\end{equation}
+
+\begin{table}[H]
+\centering
+\caption{Mass Budget}
+\label{tab:mas-bud}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{|lrr|}
+\hline
+\rowcolor[HTML]{8DB4E1} 
+\multicolumn{3}{|l|}{\cellcolor[HTML]{8DB4E1}\textbf{SC Mass Budget}}                                         \\ \hline
+\textbf{System}                                  & \textbf{Margin}                   & \textbf{Mass {[}kg{]}} \\ \hline
+AOGNC                                            &                                   & 40.0                   \\ \hline
+COM                                              &                                   & 25.0                   \\ \hline
+CDH                                              &                                   & 15.0                   \\ \hline
+CPROP                                            &                                   & 126.9                  \\ \hline
+EPROP                                            &                                   & 45.4                   \\ \hline
+INS                                              &                                   & 50.0                   \\ \hline
+MEC                                              &                                   & 55.0                   \\ \hline
+PWR                                              &                                   & 398.6                  \\ \hline
+STR                                              &                                   & 73.9                   \\ \hline
+TC                                               &                                   & 15.0                   \\ \hline
+Probe                                            &                                   & 20.0                   \\ \hline
+Harness                                          & 10\%                              & 86.6                   \\ \hline
+\rowcolor[HTML]{C5D9F0} 
+\textbf{Dry Mass}                                & \textbf{}                         & \textbf{951.3}         \\ \hline
+System Margin                                    & 20\%                              &                        \\ \hline
+\rowcolor[HTML]{C5D9F0} 
+\multicolumn{2}{|l}{\cellcolor[HTML]{C5D9F0}\textbf{Dry Mass incl.   System Margin}} & \textbf{1141.6}        \\ \hline
+CPROP Fuel   Mass                                &                                   & 736.0                  \\ \hline
+CPROP Fuel   Margin                              & 2\%                               & 15.0                   \\ \hline
+CPROP   Pressurant Mass                          &                                   & 3.5                    \\ \hline
+CPROP   Pressurant Mass Margin                   & 2\%                               & 0.1                    \\ \hline
+EPROP Fuel   Mass                                &                                   & 162.7                  \\ \hline
+EPROP Fuel   Mass Margin                         & 2\%                               & 3.3                    \\ \hline
+\rowcolor[HTML]{C5D9F0} 
+\textbf{Total Wet   Mass}                        & \textbf{}                         & \textbf{2062.4}        \\ \hline
+Launch   Adapter                                 &                                   & 85.0                   \\ \hline
+\rowcolor[HTML]{C5D9F0} 
+\textbf{Total Launch   Mass}                     & \textbf{}                         & \textbf{2147.4}        \\ \hline
+\end{tabular}}
+\end{table}
+
+\subsection{Spacecraft Baseline}
+
+As a result of the mass budget, the spacecraft baseline design can be derived, which is shown in Table \ref{tab:sc-bas}. In it, the chosen main components of the individual subsystems are displayed together with some key data. While the mass and the propulsion components, together with the heating system, are a direct optimized result of the iteration process between GMAT, the delta v budget, mass budget and pressure drop script, some other components are chosen on the basis of the Ice Giants mission from ESA \cite{ESA.2019}. The Phobos surface probe as a payload can be traced back to MIS.001 in Table \ref{tab:mis-req}. Especially the space frame design is chosen to keep the placement of the propulsion system components flexible.
+
+\begin{table}[H]
+\centering
+\caption{Spacecraft Baseline}
+\label{tab:sc-bas}
+\resizebox{\linewidth}{!}{%
+\begin{tblr}{
+  row{1} = {Cornflower,c},
+  cell{1}{1} = {c=2}{},
+  hlines,
+  vlines,
+}
+\textbf{Spacecraft Baseline Design} &                                                                                                                                                                                                                         \\
+{Mass \\(incl. 20\% sys. margin)}   & {Dry mass: 1141.6 kg \\ Chemical propellant mass (excl. margin): 751.3 kg\\ Electrical propellant mass (excl. margin): 166.0 kg\\ Wet mass: 2062.4 kg}                                                                  \\
+Payload                             & {Phobos surface probe\\ Phobos imager}                                                                                                                                                                                  \\
+Propulsion                          & {1x main bipropellant thruster (450 N)\\ 12x RCS thruster (12 N)\\ 2x pressurant tank (40 l)\\ 1x bipropellant tank (331 l)\\ 2x bipropellant tank (198 l)\\ 1x electric thruster (0.090 N)\\ 2x noble gas tank (60 l)} \\
+AOGNC                               & {1x coarse rate sensor\\ 2x navigation cameras\\ 2x IMUs\\ 2x star trackers\\ 4x reaction wheels\\ (+ RCS thrusters)}                                                                                                   \\
+Communications                      & {X-band uplink/downlink\\ Ka-band downlink}                                                                                                                                                                             \\
+Power                               & {2x solar array (2m x 7.5m)\\ Power Processing Unit (PPU) + internal batteries}                                                                                                                                         \\
+Data Handling                       & {Redundant On-Board Computing (OBC)\\capability + storage}                                                                                                                                                              \\
+Structures                          & Space frame design                                                                                                                                                                                                      \\
+Thermal                             & {MLI insulation blankets\\ Heating system within the pressurant tanks}                                                                                                                                                  
+\end{tblr}
+}
+\end{table}
+
+%\vspace*{\fill}
+
+\section{Chemical Propulsion System}
+    
+    
+\subsection{Chemical Propulsion System Requirements}
+The chemical propulsion system requirements in Table \ref{tab:sys-req} are derived from the mission requirements in Table \ref{tab:mis-req}.
+
+\begin{table}[H]
+\centering
+\caption{Propulsion System Requirements}
+\label{tab:sys-req}
+\scalebox{0.9}{
+\begin{tblr}{
+  row{1} = {Cornflower},
+  row{2} = {Spindle},
+  hlines,
+  vline{-} = {1-10}{},
+}
+                 & \textbf{Propulsion System Requirements}                                                                                                                                                                                                                   \\
+\textbf{Req. ID} & \textbf{Statement}                                                                                                                                                                                                                                        \\
+CPROP.001         & {The propulsion system shall provide the necessary \\thrust and delta v, required to perform \\the foreseen mission manoeuvers.}                                                                                                                      \\
+CPROP.002         & {The propulsion system shall provide torques to \\compensate the main engine misalignments and \\for all other attitude and orbit control maneuvers, \\including safe-mode operation and reaction wheel \\off loading, as required by mission planning.} \\
+CPROP.003         & {The subsystem shall have inhibits against critical \\failures leading to personnel hazard (e.g. while \\handling the spacecraft)}                                                                                                                        \\
+CPROP.004         & {The propulsion system shall include single failure \\tolerant measurement of the propellant pressure.}                                                                                                                                              \\
+CPROP.005         & {The propulsion system shall provide means to \\isolate potential external leakages and/or failures \\of thruster flow control valves.~~}                                                                                                                 \\
+CPROP.006         & {The propulsion system shall include access \\points (valves) for filling and draining the \\propulsion system on ground.}                                                                                                                          \\
+CPROP.007         & {All components within the propulsion system \\shall be TRL9.}     
+                                                            \\
+CPROP.008         & {As many components as possible  within the \\ chemical propulsion system shall be of european\\ origin.}  
+
+\end{tblr}
+}
+\end{table}
+
+\subsection{Assumptions}
+For the chemical propulsion system design the assumptions listed in Table \ref{tab:prop-assumptions} were used for the calculations.
+\begin{table}[H]
+\centering
+\caption{Assumptions}
+\label{tab:prop-assumptions}
+\resizebox{\linewidth}{!}{%
+\begin{tblr}{
+  row{1} = {Cornflower},
+  vline{1,3} = {1,3}{},
+  vline{1,3} = {2-4}{},
+  hline{1,3-5} = {-}{},
+}
+  & \textbf{Assumptions}                                                                                                                                                                                                             \\
+1 & {The overall ISP for
+the
+bipropellant engine is
+assumed to
+\\be
+an average between the
+main engine
+and RCS thrusters \\weighed by
+their
+thrust
+} \\
+2 & {The power required at Mars was scaled with
+respect to
+\\the
+power requirement in Earth using
+the
+inverse \\square law.}                       
+\end{tblr}
+}
+\end{table}
+
+\subsection{Chemical System Trade-offs}
+\label{subsection:ChemSysTradeOff}
+
+The initial system trade-offs in Section \ref{subsection:PropSysTradeOff} resulted in the selection of a bipropellant chemical subsystem over monopropellant. The application of this subsystem as part of an upper stage engine with low thrust range ($<$ 40 kN) leads to the selection of a pressure fed cycle \cite{Manfletti.2022}.
+A dual-mode bipropellant system was disregarded since the bipropellant engine is relevant during the initial high-thrust phase of the mission, and the flexibility of switching to low-thrust, high-specific impulse propulsion is already provided by the electric propulsion subsystem.
+
+Two main trade-off's were conducted for the bipropellant chemical subsystem design: the thruster selection process and the tank configuration. 
+
+The thruster selection was driven by requirements derived from the mission analysis calculations, which define a required thrust higher than 400 N, and a longest burn time of around 3000 s. The following thrusters were considered: Ariane S400-12, Ariane S400-15, NAMMO LEROS 2b and Aerojet Rocketdyne R-4D-15 HiPAT™. All these options fit the mission analysis requirements regarding thrust range, ISP, and oxidizer to fuel ratio. The Aerojet thruster was dismissed due to its US origin (CPROP.008). With the remaining European thrusters, the driver of the trade-off was the launch mass, which resulted the lower for the selected thruster: Ariane S400-15, as shown in Table \ref{tab:thruster-tradeoff} \cite{Ariane.2023}. 
+\begin{table} [H]
+\centering
+\caption{Bipropellant Main Thruster Trade-off}
+\label{tab:thruster-tradeoff}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{|l|r|l|r|r|} 
+\hline
+\rowcolor[rgb]{0.553,0.706,0.882} \multicolumn{1}{|c|}{\textbf{Thruster}}            & \multicolumn{1}{c|}{\textbf{Launch mass [kg]}}        & \multicolumn{1}{c|}{Thrust [N ]}                     & \multicolumn{1}{c|}{Burn Time [s]~}      & \multicolumn{1}{c|}{ISP [s]}                 \\ 
+\hline
+Ariane~\textcolor[rgb]{0.122,0.122,0.122}{S400-12}                                   & \textcolor[rgb]{0.122,0.122,0.122}{1584.494}          & \textcolor[rgb]{0.122,0.122,0.122}{340 to 440 [420]} & \textcolor[rgb]{0.122,0.122,0.122}{3960} & \textcolor[rgb]{0.122,0.122,0.122}{318.000}  \\ 
+\hline
+\rowcolor[rgb]{0.992,0.863,0.506} \textcolor[rgb]{0.122,0.122,0.122}{Ariane S400-15} & \textcolor[rgb]{0.122,0.122,0.122}{\textbf{1578.371}} & \textcolor[rgb]{0.122,0.122,0.122}{342 to 440 [425]} & 6600                                     & \textcolor[rgb]{0.122,0.122,0.122}{321.000}  \\ 
+\hline
+\textcolor[rgb]{0.122,0.122,0.122}{NAMMO LEROS 2b}                                   & \textcolor[rgb]{0.122,0.122,0.122}{1584.663}          & \textcolor[rgb]{0.122,0.122,0.122}{367 to 456 [420]} & 6600                                     & \textcolor[rgb]{0.122,0.122,0.122}{319.500}  \\ 
+\hline
+\multicolumn{1}{l}{Nominal values in []}                                             & \multicolumn{1}{r}{}                                  & \multicolumn{1}{l}{}                                 & \multicolumn{1}{r}{}                     & \multicolumn{1}{r}{}                        
+\end{tabular}
+}
+\end{table}
+The selected propellant combination is Monomethylhydrazine (MMH) and mixed oxides of nitrogen (MON-3). The fuel is defined by the thruster specification. With respect to the oxidizer, the thruster enabled using Nitrogen Tetroxide (NTO), MON-1 or MON-3. MON was selected over NTO due to its lower sensitivity to temperature fluctuations and the higher availability of European tanks with demonstrated compatibility. MON-3 was chosen over MON-1 because it has a lower vapor pressure, making it easier to handle and safely store before and during the mission. %include source
+
+A further trade-off determined number of propellant tanks required. Figure \ref{fig:biprop-tank-config} shows the options considered, whereby the propellant tanks are from Ariane Group and the pressurant tanks from MT Aerospace (CPROP.007 and CPROP.008).
+\begin{figure} [H]
+    \centering
+    \includegraphics[width=\linewidth]{img/BipropConfig.png}
+    \caption{Bipropellant Tanks Configuration Trade-off}
+    \label{fig:biprop-tank-config}
+\end{figure}
+The lightest option is configuration 4, however later stability analysis explained in Section \ref{subsection:sc-stab-anal} proved it unsuitable. Therefore, the next lightest and thus selected configuration includes one 331 l MMH tank, two 198 l MON tanks and 2 40 l helium tanks. 
+
+The rest of the subsystem is developed around the selected thruster and tank configuration. It will be described in detail in the following sections.
+
+
+\subsection{Chemical Propulsion System Architecture}
+
+In this chapter the architecture overview of the whole bipropellant subsystem will be given and technical decisions derived from the system requirements will be justified.
+The Chemical propulsion subsystem was developed to fulfill specific system requirements, stated in Table \ref{tab:sys-req}, and assumptions depicted in the Table \ref{tab:mis-assumptions} and it is unique technical solution. The flow chart of the chemical subsystem with all the relevant details is shown in Figure \ref{fig:flow-biprop} in the Appendix \ref{Appendix}. From the mission design it is derived that the first five maneuvers are performed using chemical propulsion including MOI which is the most demanding one concerning the overall propulsion subsystem. The main engine S400-15 from ArianeGroup shall provide the necessary thrust for this orbit insertion maneuver, the trajectory correction maneuver and remaining maneuvers while twelve ArianeGroup RCS thrusters S10-26 shall provide the thrust for a 3-axis attitude control once arrived in orbit around Phobos for at least two years. These two off the shelf bipropellant thrusters meet the requirements of this mission and are chosen also considering economic reasons and heritage of around 40 completed missions for the S400-12 and S400-15 engines. Both selected thrusters are helium pressurized and use monomethyl-hydrazine (MMH) as fuel and  mixed oxides of nitrogen MON-3 as oxidizer. From the flow chart it is visible that two 40 liter tanks are used for pressurized helium. To fill the tanks and access the fluid, fill and drain valves are placed after every tank. Helium is leaving the pressurant tanks with 310 bar and goes through a dual mechanical pressure regulator which lowers the pressure to 20 bar. Normally closed pyro valves are placed before and after pressure was regulated to isolate it in case of any leakage. Redundant check valves are ensuring that the flow is going only in the direction of the propellant tanks and safety relief valves are placed in case of any kind of over pressurisation of helium before entering the pressurization tanks. To secure that propellants are not going upstream and mixing with helium, normally closed pyro valves are placed before the propellant tanks. In the feed line of the main engine, pyro ladders are introduced and are chosen due to their redundancy and minimum leakage. Furthermore, the mission is designed in a way that the main engine is passivated in between the second and third maneuver due to long waiting time as well as after fifth (last chemical) maneuver which leads to a possible leakage of propellants. The pyro ladder will isolate main engine during these periods and ensures redundant access to the main engine. Upstream the RCS thrusters latch valve is placed to control the propellant flow for attitude control. The latch valves are used because of their ability to open and close numerous times which is advantageous in the case of attitude control. The S10-26 are dual seat thursters meaning they have two flow control valves serially connected which allow a more precise attitude control and the shutdown of a thruster in case of a failure or malfunction.
+
+
+\subsection{Chemical Propulsion System Mass Budget}
+
+To compute the dry mass of the chemical subsystem, the component selection is iterated throughout the development process to ensure a failure free mission by choosing off the shelf equipment while taking into account heritage from already completed missions. The current baseline consists of the equipment listed in the Table \ref{tab:equ-lis}. One of the assumptions of this mission is to have an all European component design, but at this point of development some of the selected components are outside of Europe and are marked in orange. In future development steps, this should be replaced with European components to fulfill the CPROP.008 requirement and reduce cost. Taking into account the ESA margin philosophy \cite{ESA.2012}, a margin of 20\% is applied on pipes and 5\% for off the shelf components.
+
+\vspace*{\fill}
+
+\begin{table}
+\centering
+\caption{Bipropellant Part List}
+\label{tab:equ-lis}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{|l|l|r|r|r|r|} 
+\hline
+\rowcolor[rgb]{0.553,0.706,0.882} Description                & Type/Manufacturer                                 & Amount               & \begin{tabular}[c]{@{}>{\cellcolor[rgb]{0.553,0.706,0.882}}r@{}}Mass per~\\unit [kg]\end{tabular} & Margin               & \begin{tabular}[c]{@{}>{\cellcolor[rgb]{0.553,0.706,0.882}}r@{}}Mass inc.\\margin\end{tabular}  \\ 
+\hline
+Pipes                                                        & Pipes                                             & 1                    & 2.540                                                                                             & 0.2                  & 3.048                                                                                           \\ 
+\hline
+Main Engine                                                  & S400-15                                           & 1                    & 5.200                                                                                             & 0.05                 & 5.460                                                                                           \\ 
+\hline
+RCS Thruster                                                 & S10-26                                            & 12                   & 1.800                                                                                             & 0.05                 & 8.190                                                                                           \\ 
+\hline
+Helium Tank                                                  & PVG Family 40l                                    & 2                    & 8.500                                                                                             & 0.05                 & 18.700                                                                                          \\ 
+\hline
+Fuel Tank                                                    & OST 25/0                                          & 1                    & 21.000                                                                                            & 0.05                 & 22.050                                                                                          \\ 
+\hline
+Oxide Tank                                                   & OST 25/0                                          & 2                    & 21.000                                                                                            & 0.05                 & 44.100                                                                                          \\ 
+\hline
+Fill  Vent Valve                                             & ArianeGroup                                       & 3                    & 0.060                                                                                             & 0.05                 & 0.315                                                                                           \\ 
+\hline
+Latch Valve                                                  & ArianeGroup                                       & 4                    & 0.545                                                                                             & 0.05                 & 2.289                                                                                           \\ 
+\hline
+Pyro Isolation Valve                                         & ArianeGroup                                       & 16                   & 0.160                                                                                             & 0.05                 & 2.688                                                                                           \\ 
+\hline
+Safety Relief Valve                                          & Safran                                            & 2                    & 0.700                                                                                             & 0.05                 & 1.470                                                                                           \\ 
+\hline
+Check Valve                                                  & {\cellcolor[rgb]{1,0.831,0.541}}Vacco             & 4                    & 0.020                                                                                             & 0.05                 & 0.084                                                                                           \\ 
+\hline
+Filter                                                       & {\cellcolor[rgb]{1,0.831,0.541}}Vacco             & 8                    & 1.500                                                                                             & 0.05                 & 12.600                                                                                          \\ 
+\hline
+Dual Pressure Regulator                                      & {\cellcolor[rgb]{1,0.831,0.541}}Stanford Mu       & 1                    & 1.130                                                                                             & 0.05                 & 1.187                                                                                           \\ 
+\hline
+Pressure Transducer                                          & {\cellcolor[rgb]{1,0.831,0.541}}Bradford Space    & 5                    & 0.230                                                                                             & 0.05                 & 1.207                                                                                           \\ 
+\hline
+Thermocouples                                                & {\cellcolor[rgb]{1,0.831,0.541}}Collins Aerospace & 12                   & 0.350                                                                                             & 0.05                 & 4.410                                                                                           \\ 
+\hline
+\rowcolor[rgb]{0.773,0.851,0.941} \multicolumn{1}{|l}{Total} & \multicolumn{1}{l}{}                              & \multicolumn{1}{r}{} & \multicolumn{1}{r}{}                                                                              &                      & 126.948                                                                                         \\ 
+\hline
+\multicolumn{1}{l}{}                                         & \multicolumn{1}{l}{}                              & \multicolumn{1}{r}{} & \multicolumn{1}{r}{}                                                                              & \multicolumn{1}{r}{} & \multicolumn{1}{r}{}                                                                            \\
+\multicolumn{1}{l}{}                                         & \multicolumn{1}{l}{}                              & \multicolumn{1}{r}{} & \multicolumn{1}{r}{}                                                                              & \multicolumn{1}{r}{} & \multicolumn{1}{r}{}                                                                           
+\end{tabular}
+}
+\end{table}
+
+\subsection{Chemical Propellant Budget}
+
+\begin{table}[H]
+\centering
+\caption{Chemical Propellant Budget}
+\label{tab:budget-prop-chem}
+\resizebox{0.65\linewidth}{!}{%
+\begin{tblr}{
+  row{1} = {Cornflower},
+  row{2} = {Spindle},
+  row{8} = {Spindle},
+  row{12} = {Spindle},
+  row{13} = {Cornflower},
+  column{2} = {r},
+  column{3} = {r},
+  cell{1}{2} = {c},
+  cell{1}{3} = {c},
+  cell{2}{2} = {c},
+  cell{2}{3} = {c},
+  hlines,
+  vlines,
+}
+                       & {[}kg]           & {[}kg]           \\
+\textbf{Maneuver Name} & \textbf{MMH}     & \textbf{MMO}     \\
+C3                     & 116.714          & 192.578          \\
+TCM                    & 0.290            & 0.478            \\
+MOI                    & 155.285          & 256.221          \\
+Match INC              & 2.298            & 3.791            \\
+Raise Peri min         & 0.169            & 0.280            \\
+Total Chemical         & 274.756          & 453.348          \\
+Margin 1\% AOGNC       & 2.748            & 4.533            \\
+Margin 2\%             & 5.495            & 9.067            \\
+Margin Sum             & 8.243            & 13.600           \\
+Leftover               & 8.744            & 14.427           \\
+\textbf{Total}         & \textbf{283.500} & \textbf{467.775} 
+\end{tblr}
+}
+\end{table}
+
+\subsection{Helium Fill Level, Pressure and Temperature in Pressurant and Propellant Tanks}
+\label{subsection:PressCalc}
+
+The feeding system for the propellant tanks is pressure regulated to enable for consistent and predictable performance and to optimize fuel efficiency, which is important for a long-duration mission. A pressure regulated system requires the pressurant gas to be stored in additional tanks. In the presented bipropellant system, the propellant tanks are pressurized with Helium stored in two 40-liter tanks from MT Aerospace \cite{MTTankka92:online}. 
+
+The options considered as a pressurant gas were helium and nitrogen, which were determined by the selected propellant tanks. Helium is used as a pressurant gas due to the following advantages over nitrogen: 
+\begin{itemize}
+    \item its lower density, which means it can provide the same pressure at lower mass or volume 
+    \item a lower viscosity, useful for precise flow control and better flow over small orifices and valves
+    \item it is non-reactive even at high temperatures and pressures, making it ideal for use in a pressurized system where contamination or chemical reactions can be a concern
+\end{itemize}
+However, there are also some disadvantages to using helium over nitrogen. For example, helium is more expensive and less widely available than nitrogen, which can make it less cost-effective. Nonetheless, its low density and thus reduction of the launch mass is the deciding factor in favour of helium.
+
+To guarantee the required operation of the bipropellant chemical thrusters, thereby contributing to requirement CPROP.001, a thorough analysis of the Helium fluidic conditions throughout the bipropellant engine operation is performed. This analysis is based on the assumptions listed on Table \ref{tab:press-assumptions}.
+\begin{table} [H]
+\centering
+\caption{Assumptions Pressurant Tank Sizing}
+\label{tab:press-assumptions}
+\resizebox{\linewidth}{!}{%
+\begin{tblr}{
+  row{1} = {Cornflower},
+  vline{1,3} = {-}{},
+  hline{1,3-7} = {-}{},
+}
+  & \textbf{Assumptions}                                                                                                                                                                                    \\
+1 & {The initial ullage volume in the propellant tanks is filled with Helium before the \\start of operation.}                                                                                              \\
+2 & {The temperature of Helium in the propellant tanks is calculated as the equilibrium \\temperature between the Helium in the tank and the incoming Helium from the \\pressure regulator.}                \\
+3 & {The temperature increase of Helium over the pressure regulator due to the \\Joule-Thomson effect is averaged over the maneuvre time with the conditions \\at the beginning and end of the maneuvre.} \\
+4 & {Heat transfer in Helium within the propellant tanks at the liquid-vapour interface \\and at the tank walls is neglected.}  \\ 
+5 & {The required combustion chamber inlet pressure is 18.5 bars and the pressure drop \\between the propellant tanks and the thruster is 1.5 bars,\\leading to a required propellant tank pressure of 20 bars} 
+\end{tblr}
+}
+\end{table}
+For the propulsion system design, one of the most relevant parameters is the amount of helium required in the system since it influences the launch mass, both directly as additional wet mass and indirectly as it affects dry mass of the required pressurant tanks. In order to maintain the required engine operation, the pressurization system shall contain enough helium for all foreseen maneuvers and at least an additional ullage mass of 20 \%. Table \ref{tab:press-tank-mar} shows the fulfillment of these conditions. 
+\begin{table}[H]
+\centering
+\caption{Pressurant Tank Margin}
+\label{tab:press-tank-mar}
+\resizebox{0.8\linewidth}{!}{%
+\begin{tblr}{
+  row{4} = {Spindle},
+  row{5} = {Spindle},
+  cell{1}{2} = {r},
+  cell{2}{2} = {r},
+  cell{3}{2} = {r},
+  cell{4}{1} = {Spindle},
+  cell{4}{2} = {r},
+  hlines,
+  vlines,
+}
+Initial Helium Mass in Pressurant Tank [kg] & 3.266  \\
+Total Helium Mass maneuvers [kg]            & 1.961  \\
+Leftover Helium in pressurant tank [kg]     & 1.305  \\
+\textbf{Pressurant Mass Margin [\%]}       & 40.000 \\
+Required Pressurant Mass Margin [\%]        & $\g$20.000 
+\end{tblr}
+}
+\end{table}
+
+Regarding the selection of the pressurant tanks, two suppliers were considered: Northrop Grumman and MT Aerospace. Despite the higher range of volumes offered by the Northrop Grumman \cite{Pressura17:online}, it was not selected because of its US origin (CPROP.008). The high-pressure helium tanks offered by MT aerospace have a Mean Operating Pressure (MEOP) of 310 bars, which results in a total volume of helium of 48 liters required for maneuvers. Considering an ullage volume of 20 \%, the volume of helium shall be at 57.6 $(m^3)$ \cite{Manfletti.2022}. Nevertheless, the sizing of the helium tanks is not only dependent on the required volume, but also on the helium pressure and temperature conditions, both in the propellant and in the helium tanks. 
+For this reason, a fluidic simulation was performed with the following objectives:
+\begin{itemize}
+    \item guaranteeing safe propellant conditions;
+    \item maintaining the pressure of helium within the pressurant tanks above the 20 bars required in the propellant tanks; 
+    \item keeping the helium temperature within the pressurant tank between - 30 and + 60ºC as specified by the tank supplier (Table \ref{tab:pre-tan});
+\end{itemize}
+The calculated pressure and temperature conditions of helium within the pressurant tanks throughout the maneuvering time are depicted in figures \ref{fig:HeTempHeTank} and \ref{fig:HePressureHeTank}. For this calculation, only the first five maneuvers are considered, since the remaining maneuvers are not performed with the chemical engine. 
+As observed in figure \ref{fig:HePressureHeTank}, the helium pressure is still above 100 bars after the last chemical maneuver, leaving more than enough margin for the RCS thruster operation. The temperature of helium within the pressurant tank remains between - 20 and + 50ºC, as depicted in figure \ref{fig:HePressureHeTank} fulfilling the aforementioned tank temperature constraint. In order to keep the temperature in this range, a heater is added to the pressurant tank. This heater is active in between maneuvers, as well as during the biggest maneuvers, which coincide with the biggest pressure and temperature drops in the charts: the first and third maneuver, namely C3 and MOI respectively.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\linewidth]{img/HelliumPressureHeTank.png}
+  \caption{Helium Pressure in Pressurant Tanks}
+  \label{fig:HePressureHeTank}
+\end{figure}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\linewidth]{img/HeliumTempHeTank.png}
+  \caption{Helium Temperature in Pressurant Tanks}
+  \label{fig:HeTempHeTank}
+\end{figure}
+Table \ref{tab:press-tank-siz} displays the exact pressure and temperature values at the beginning and end of each chemical maneuver, as well as the heating power required. The pressurant tank is warmed up to 50 ºC before the beginning of operation and between the second and third maneuvers; and to 20 ºC before the last two chemical maneuvers. The maximum heater power required is 200 W during the MOI maneuver, which can be easily provided by the power system since at this point of operation, the electric engine is still not in use.
+\begin{table}[H]
+\centering
+\caption{Pressurant Tank Sizing}
+\label{tab:press-tank-siz}
+\resizebox{\linewidth}{!}{%
+\begin{tblr}{
+  row{1} = {Cornflower},
+  row{2} = {Spindle},
+  row{4} = {r},
+  row{6} = {r},
+  row{9} = {r},
+  row{12} = {r},
+  row{14} = {r},
+  row{15} = {Spindle},
+  row{18} = {Spindle},
+  column{2} = {r},
+  column{3} = {r},
+  cell{1}{2} = {c},
+  cell{1}{3} = {c},
+  cell{1}{4} = {c},
+  cell{1}{5} = {c},
+  cell{1}{6} = {Cornflower,c},
+  cell{2}{2} = {c},
+  cell{2}{3} = {c},
+  cell{2}{4} = {c},
+  cell{2}{5} = {c},
+  cell{2}{6} = {Spindle,c},
+  cell{3}{1} = {r=2}{},
+  cell{3}{2} = {r=2}{},
+  cell{3}{3} = {r=2}{},
+  cell{3}{4} = {r},
+  cell{3}{5} = {r},
+  cell{3}{6} = {r=2}{r},
+  cell{5}{1} = {r=2}{},
+  cell{5}{2} = {r=2}{},
+  cell{5}{3} = {r=2}{},
+  cell{5}{4} = {r},
+  cell{5}{5} = {r},
+  cell{5}{6} = {r=2}{r},
+  cell{7}{1} = {c=3}{},
+  cell{7}{4} = {r},
+  cell{7}{5} = {r},
+  cell{7}{6} = {r},
+  cell{8}{1} = {r=2}{},
+  cell{8}{2} = {r=2}{},
+  cell{8}{3} = {r=2}{},
+  cell{8}{4} = {r},
+  cell{8}{5} = {r},
+  cell{8}{6} = {r=2}{r},
+  cell{10}{1} = {c=3}{},
+  cell{10}{4} = {r},
+  cell{10}{5} = {r},
+  cell{10}{6} = {r},
+  cell{11}{1} = {r=2}{},
+  cell{11}{2} = {r=2}{},
+  cell{11}{3} = {r=2}{},
+  cell{11}{4} = {r},
+  cell{11}{5} = {r},
+  cell{11}{6} = {r=2}{r},
+  cell{13}{1} = {r=2}{},
+  cell{13}{2} = {r=2}{},
+  cell{13}{3} = {r=2}{},
+  cell{13}{4} = {r},
+  cell{13}{5} = {r},
+  cell{13}{6} = {r=2}{r},
+  cell{15}{1} = {c=2}{Spindle},
+  cell{15}{3} = {Spindle},
+  cell{16}{1} = {c=2}{},
+  cell{17}{1} = {c=2}{},
+  cell{18}{1} = {c=2}{Spindle},
+  cell{18}{3} = {Spindle},
+  vline{-} = {1-14}{},
+  vline{5-6} = {4,6,9,12,14}{},
+  vline{1-2,5-7} = {7,10}{},
+  vline{1-2,7} = {15-18}{},
+  hline{1-3,5,7-8,10-11,13,15-19} = {-}{},
+}
+                                        & {[}m/s]          & {[}kg]                   & {[}bar]           & {[}ºC]               & {[}W]           \\
+\textbf{Maneuver Name}                 & \textbf{Delta v} & \textbf{Helium required} & \textbf{Pressure} & \textbf{Temperature} & \textbf{Heater} \\
+C3                                      & 509.350          & 0.836                   & 310.000           & 50.000               & 50              \\
+                                        &                  &                          & 177.175           & -17.479              &                 \\
+TCM                                     & 34.553            & 0.002                    & 177.175           & -17.479             & OFF             \\
+                                        &                  &                          & 176.903           & -17.635              &                 \\
+Waiting time                            &                  &                          & 223.156           & 50.000               & $\leq$50              \\
+MOI                                     & 751.782          & 1.105                    & 223.156           & 50.000               & 200             \\
+                                        &                  &                          & 96.268            & -6.683              &                 \\
+Waiting time                            &                  &                          & 105.854            & 20.000               & $\leq$50              \\
+Match INC                               & 13.153           & 0.017                    & 105.854            & 20.000               & OFF             \\
+                                        &                  &                          & 103.498            & 17.369               &                 \\
+Raise Peri min                          & 35.660            & 0.001                    & 103.498            & 17.369               & OFF             \\
+                                        &                  &                          & 103.332            & 17.184               &                 \\
+Total Helium Mass maneuvers [kg]       &                  & 1.961                    &                   &                      &                 \\
+Ullage Helium in propellant tanks [kg]  &                  & 0.259                    &                   &                      &                 \\
+Leftover Helium in pressurant tank [kg] &                  & 1.305                    &                   &                      &                 \\
+\textbf{Total Helium Mass [kg] }        &                  & 3.525                    &                   &                      &                 
+\end{tblr}
+}
+\end{table}
+As shown in the last four rows of the table, the total amount of helium required in the system is 3.525 kg, accounting for the helium within the pressurant tanks and the initial helium within the propellant tanks filling their ullage volume. The mass distribution of helium within the bipropellant feeding system throughout the maneuvering time is depicted in Figure \ref{fig:HeMass}.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\linewidth]{img/HeliumMass.png}
+  \caption{Helium Mass in Tanks}
+  \label{fig:HeMass}
+\end{figure}
+With respect to guaranteeing safe propellant operation, the relevant parameter is the helium temperature within the propellant tanks. It is critical to prevent the freezing of the propellants during operation. The freezing temperature of MMH is - 52 ºC \cite{MONMMH42:online} and -15 ºC for MON-3 \cite{Basicsof18:online} at a pressure of 20 bars. The upper temperature limit is defined by the boiling temperatures at this pressure condition, which are approximately 87 ºC for MMH and 56 ºC for MON-3 \cite{2019003356:online}. Figure \ref{fig:HeTempProp} shows that the temperature of helium within the propellant tanks stays between 20 and 36 ºC throughout operation, within the propellants' safe temperature range.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\linewidth]{img/HeliumTempPropellantTanks.png}
+  \caption{Helium Temperature in Propellant Tanks}
+  \label{fig:HeTempProp}
+\end{figure}
+
+\subsection{Reaction Control System (RCS)}
+
+The RCS system is based on the CPROP.002 requirement, shown in Table \ref{tab:sys-req}. To design this RCS system, an allowable engine offset and misalignment is needed. In this case, the engine offset can be interpreted as an offset of the center of gravity from the main axis as well. An allowable offset of 60 mm is given for the launch phase as a static unbalance for a three-axis stabilized spacecraft in the launchers user's manual \cite{Arianspace.2016}. For the design of this RCS system, a similar offset shall be chosen. In this case, the static offset shall not be traced back to the misplacement of the engine as the only source. For the engine misalignment, the Ice Giants mission is used as a reference \cite{ESA.2019}. The resulting allowable combined engine errors are depicted in \ref{tab:eng-mis}. Because the RCS system is not only needed for the compensation of the main engine moments in the thrust phases, but also for the AOGNC maneuvers, namely the desaturation of the reaction wheels while in the station keeping phase around Phobos, the RCS system shall be placed at the location where it's needed for the longest time duration. This then leads to a positioning in the center of gravity plane at the station keeping phase. For the positioning of the RCS thrusters, the configuration displayed in Figure \ref{fig:rcs} is selected. This configuration of 12 thrusters each, shows an overall good static and dynamic tracking error as well as a redundancy of two thrusters and is also portrayed as the best out of 14 different configurations \cite{Pasand.2017}. More thrusters would increase the redundancy but also lead to a higher system mass and more complex system because the piping needs to be considered as well. Therefore, this configuration is chosen. In it, each bipropellant RCS-engine has a thrust of 10.25 N for the given pressure of the propellant, which also feeds the main bipropellant engine.
+
+\begin{table}[H]
+\caption{Allowable engine misalignment}
+\label{tab:eng-mis}
+\centering
+\scalebox{1}{
+\begin{tabular}{|lr|}
+\hline
+\multicolumn{2}{|c|}{\cellcolor[HTML]{8DB4E1}\textbf{Allowable combined engine errors}} \\ \hline
+\multicolumn{1}{|l|}{Maximum offset {[}mm{]}}                      & 50.0               \\ \hline
+\multicolumn{1}{|l|}{Maximum misalignment {[}deg{]}}               & 1.0                \\ \hline
+\end{tabular}}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.70]{img/RCS-config.jpg}
+  \caption{RCS Thruster Configuration}
+  \label{fig:rcs}
+\end{figure}
+
+
+\section{Electrical Propulsion System}
+
+\subsection{Electrical Propulsion System Requirements}
+
+\begin{table}[H]
+\centering
+\caption{Electric Propulsion System Requirements}
+\label{tab:elec-req}
+\resizebox{0.85\linewidth}{!}{%
+\begin{tblr}{
+  row{1} = {Cornflower},
+  row{2} = {Spindle},
+  hlines,
+  vlines,
+}
+                 & \textbf{Electric Propulsion System Requirements}                                     \\
+\textbf{Req. ID} & \textbf{Statement}                                                                   \\
+EPROP.001        & {The total mass of the electric subsystem shall be\\as low as possible.}              \\
+EPROP.002        & {The additional power demand shall be\\as low as possible.}                           \\
+EPROP.003        & {The thruster shall have a burntime of under\\one year to achieve the required deltaV.} \\
+EPROP.004        & {All parts shall be originated from\\european manufacturers.}                         \\
+EPROP.005        & {The thruster shall be capable to perform \\orbital maintenance}                         \\
+EPROP.006        & {All components within the electric propulsion\\system shall be TRL9.}               
+\end{tblr}
+}
+\end{table}
+
+\subsection{Electrical Propulsion System Trade-off's}
+The electrical propulsion system is completely build around its key component, its thruster.
+In the thruster selection its specified thrust, power demand and specific impulse all together ultimately have driven the selection.
+Following EPROP.001, the lowest total mass is the target value to optimise for.
+The complete mass of the electrical propulsion system contains not only hardware and fuel mass but also the mass associated to meet the additional power demands.
+In compliance with EPROP.004 all to us available european electric thrusters have been collected and are evaluated in Table \ref{tab:el-thruster}.
+To ensure EPROP.005, a minimal thrust of approximately 5 mN is required (discarded marked red).
+Using the impulsive delta v values by an uncertainty factor of 2, for the sections planned to be performed electrically, burn times can be computed.
+In order to set a limit in flight time and feature realistic operational times, EPROP.003 was created and applied.
+This additional requirement narrowed down the options significantly (discarded marked red).
+As EPROP.003 being an indirect requirement on thrust at roughly 80 mN, EPROP.005 is passively contained.
+From there, the fuel mass was calculated over delta v and specific impulse as well as the additional solar mass was derived from the linear part of the power mass Equation \ref{eq:m-pwr}. The minimal sum of which leaded to the selection of the Safran PPS 1350 Hall Effect Thruster, which was additionally refined by trying out all narrowed down options in the mass\_design.m script and comparing its launch masses. Both approaches concluded the same choice.
+
+\subsection{Electrical Propulsion System Architecture}
+To complete the system architecture, additional components have been selected suiting the Safran PPS 1350 Thruster.
+As suggested in the Safran Portfolio \cite{Safran.porfolio}, the complete propulsion system for the SMART-1 lunar probe was presented as setup for this thruster.
+Conveniently almost all of the components can be transferred to this mission which lead to the copy of the system architecture of SMART-1 for this mission.
+Only the xenon tank did not suit the required fuel mass and had to be replaced as shown in Table \ref{tab:parts-elec}. This was additionally convenient since the xenon tank was the only part being manufactured outside of Europe and by this change EPROP.004 can remain fulfilled.
+Since only the subsystem drymass of SMART-1 was reported, the tank mass of the Lincoln Composites xenon Tank was estimated and deducted from the SMART-1 subsystem drymass.
+The adapted flowchart of the electrical propulsion system and connection of components can be seen in Figure \ref{fig:flow-elec} and the hardware in Figure \ref{fig:elec-hardware}.
+
+\vspace*{\fill}
+
+\subsection{Electrical Propulsion System Mass Budget}
+
+
+\begin{table}[H]
+\centering
+\caption{Electric Partlist}
+\label{tab:parts-elec}
+\resizebox{\linewidth}{!}{%
+
+\begin{tblr}{
+  row{1} = {Cornflower},
+  row{2} = {Spindle,c},
+  row{6} = {FairPink},
+  row{10} = {Spindle},
+  row{12} = {Spindle},
+  cell{1}{1} = {c},
+  cell{1}{2} = {c},
+  cell{1}{4} = {c},
+  cell{1}{5} = {c},
+  cell{1}{6} = {c},
+  cell{3}{2} = {c},
+  cell{3}{3} = {c},
+  cell{3}{4} = {r},
+  cell{3}{5} = {r},
+  cell{3}{6} = {r},
+  cell{4}{2} = {c},
+  cell{4}{3} = {c},
+  cell{4}{4} = {r},
+  cell{4}{5} = {r},
+  cell{4}{6} = {r},
+  cell{5}{2} = {c},
+  cell{5}{3} = {c},
+  cell{5}{4} = {r},
+  cell{5}{5} = {r},
+  cell{5}{6} = {r},
+  cell{6}{2} = {c},
+  cell{6}{3} = {c},
+  cell{6}{4} = {r},
+  cell{6}{5} = {r},
+  cell{6}{6} = {r},
+  cell{7}{2} = {c},
+  cell{7}{3} = {c},
+  cell{7}{4} = {r},
+  cell{7}{5} = {r},
+  cell{7}{6} = {r},
+  cell{8}{2} = {c},
+  cell{8}{3} = {c},
+  cell{8}{4} = {r},
+  cell{8}{5} = {r},
+  cell{8}{6} = {r},
+  cell{9}{2} = {c},
+  cell{9}{3} = {c},
+  cell{9}{4} = {r},
+  cell{9}{5} = {r},
+  cell{9}{6} = {r},
+  cell{10}{2} = {c},
+  cell{10}{3} = {c},
+  cell{10}{4} = {r},
+  cell{10}{5} = {r},
+  cell{10}{6} = {r},
+  cell{11}{2} = {c},
+  cell{11}{3} = {c},
+  cell{11}{4} = {r},
+  cell{11}{5} = {r},
+  cell{11}{6} = {r},
+  cell{12}{2} = {c},
+  cell{12}{3} = {c},
+  cell{12}{5} = {r},
+  cell{12}{6} = {r},
+  hlines,
+  vlines,
+}
+                                              & \textbf{}                   &              & {[}kg]                             & {[}kg]          & {[}kg]                           \\
+\textbf{Description}                          & \textbf{Manufacturer}       & \textbf{Qt.} & {\textbf{Mass}\\\textbf{per Unit}} & \textbf{Marg.} & {\textbf{Total }\\\textbf{Mass}} \\
+{Hall Effect Thruster\\PPS  1350}             & {Safran\\(France)}          & 1            &                                    &                 &                                  \\
+xenon Flow Controller                         & {Safran\\(France)}          & 2            &                                    &                 &                                  \\
+{Bang-Bang \\Pressure Regulation Unit}        & {Safran\\(France)}          & 1            &                                    &                 &                                  \\
+\sout{xenon Tank 49 liter}                    & {\sout{Lincoln Comp.}\\\sout{(USA)}} & 1       & $>$ 5.000                          &                 &                                  \\
+{Power Processing Unit\\Thruster Switch Unit} & {ETCA\\(Belgium)}           & 1            &                                    &                 &                                  \\
+{Pressure Regulation\\Electronic Card}        & {Atermes\\(France)}         & 1            &                                    &                 &                                  \\
+{SMART-1 subsys. drymass }                      &                             & 1            & 29.000                             &                 &                                  \\
+{SMART-1 subsys. drymass\\without Xe tank}    &                             & 1            & 24.000                             & 0.05            & 25.200                           \\
+{xenon Tank\\ S-XTA / 120l   }                    & {MT Aerospace\\(Germany)}   & 1            & 16.800                             & 0.20            & 20.160                           \\
+\textbf{Total}                                &                             &              &                                    &                 & \textbf{45.360}                  
+\end{tblr}
+}
+\end{table}
+
+\subsection{Power Budget and Solar Panel Sizing}
+\label{sec:solar}
+Due to a very high efficiency of the Power Supply Unit (PPU), the total power demand of the electrical system is set equal to the power usage of the Hall Effect Thruster itself.
+Therefore, the power demand of the electrical system of 1500W is added to the base power usage of 550W which together is converted via the provided power system mass formula directly as seen in Equation \ref{eq:m-pwr} below.
+To transfer power requirements from Mars to Earth, the inverse-square law is used as in Equation \ref{eq:pwr}.
+The additional power demand of the electric propulsion is consequentially scaling the power mass linearly by a factor of $0.0758 \cdot 1.524^2$ kg per Watt.
+The power system mass $m_{\mathrm{PWR}}$ (Equation \ref{eq:m-pwr}) is including the mass of the solar arrays as well as the power conditioning hardware.
+
+\begin{equation}
+    P_{\mathrm{Earth}} = P_{\mathrm{Mars}} \cdot 1.524^2 = 2050W \cdot 1.524^2 = 4761.3 W
+    \label{eq:pwr}
+\end{equation}
+\begin{equation}
+    m_{\mathrm{PWR}} = 0.0758 \frac{kg}{W} \cdot P_{\mathrm{Earth}}  + 37.741 kg = 398.65 kg 
+    \label{eq:m-pwr}
+\end{equation}
+
+The surface area of the solar panels is directly derived by the solar constant at Mars $E_{\mathrm{Mars}}$ and an assumed solar cell efficiency of $\eta=0.29$.
+
+\begin{equation}
+    A_{\mathrm{Solar}} = \frac{P_{\mathrm{Mars}}}{\eta \cdot E_{\mathrm{Mars}}} = \frac{2050W}{0.29 \cdot \frac{1361}{1.524^2}\frac{W}{m^2}} =  12.06 m^2
+    \label{eq:solarA}
+\end{equation}
+
+In order to fit a modular size for the solar panels, the solar array area is rounded up to $A_{\mathrm{Solar}}=13 \mathrm{m^2}$ into two symmetrical 6.5 m x 1 m sections.
+
+\subsection{Electrical Propellant Budget}
+
+\begin{table}[H]
+\centering
+\caption{Electrical Propellant Budget}
+\label{tab:budget-prop-el}
+\resizebox{0.45\linewidth}{!}{%
+\begin{tblr}{
+  row{1} = {Cornflower},
+  row{2} = {Spindle},
+  row{7} = {Spindle},
+  row{9} = {Spindle},
+  row{10} = {Cornflower},
+  column{2} = {r},
+  cell{1}{2} = {c},
+  cell{2}{2} = {c},
+  hlines,
+  vlines,
+}
+                       & {[}kg]           \\
+\textbf{Maneuver Name} & \textbf{Xe}      \\
+Circularize            & 51.805           \\
+Spiral Down Match      & 56.065           \\
+Orbital Maintenance    & 6.982            \\
+EOL                    & 47.725           \\
+Total Electric         & 162.578          \\
+Margin 2\%             & 3.252            \\
+Leftover               & 3.422            \\
+\textbf{Total}         & \textbf{166.000} 
+\end{tblr}
+}
+\end{table}
+
+\subsection{Technology Needs}
+Besides all other components being flight proven and align with EPROP.006, the selected xenon Tank from the S-XTA family of MT Aerospace is still under development and is therefore a technological need.
+
+
+\section{Spacecraft Architecture}
+
+\subsection{Spacecraft Orientation}
+
+The orientation of the spacecraft in the quasi-satellite orbit around Phobos in respect to Phobos is chosen in a way, that the instruments always face Phobos, as displayed in Figure \ref{fig:SC-XY}. To achieve such an orientation in the main axis frame of the spacecraft, a constant rotation around the Z-axis is needed. The rotation speed has to match one orbital period around Mars. In this case, a rotational period of 27576.2 seconds is needed. In this orientation, the AOGNC system shall provide the required torques to counter the induced orbital perturbations. For station-keeping, the electrical engine is used. The RCS thrusters enable reaction wheel desaturation of the AOGNC system by locking the spacecraft in place. While the chemical and electrical thrusters are placed alongside the X-axis of the spacecraft, the solar arrays are located alongside to Y-axis, where they can rotate freely around the axis without changing the spacecrafts attitude. This orientation is chosen to ensure sun-tracking of the solar arrays. As presented in Figure  \ref{fig:SC-YZ}, the instrument and communication subsystem are located on the Z-axis to ensure, that the field of view is always in the direction of Phobos and undisturbed by the other parts of the spacecraft. In case of the transmission of data to Earth or the Mars Relay Network via i.e. NASA’s Mars Reconnaissance Orbiter (MRO) or the Mars Atmospheric and Volatile EvolutioN (MAVEN) orbiter, the spacecraft can interrupt its constant rotation around the Z-axis to then point itself in the dedicated direction \cite{NASA.2016}. This capability is also needed for the orbital station-keeping maneuvers to point the X-axis, and therefore the thrust vector, respectively. 
+
+\begin{figure}[H]
+  \centering  \includegraphics[width=1\linewidth]{img/Phobos XY.jpg}
+  \caption{Spacecraft orientation in XY-plane}
+  \label{fig:SC-XY}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\linewidth]{img/Phobos YZ.jpg}
+  \caption{Spacecraft orientation in YZ-plane}
+  \label{fig:SC-YZ}
+\end{figure}
+
+\subsection{Spacecraft Stability Analysis}
+\label{subsection:sc-stab-anal}
+
+To ensure that a flat spin is not occurring during the mission phase around Phobos where a constant rotational speed is present, the following relation for the moments of inertia in the main axis system, shown in Equation \ref{eq:SC-stab}, needs to be fulfilled \cite{Walter.2018}.
+
+\begin{equation}
+I_z \ge I_y \ge I_x
+\label{eq:SC-stab}
+\end{equation}
+
+While the components of the spacecraft that account for the dry mass, except the Phobos surface probe, are stationary in respect to the internal spacecraft frame, the propellants are not. Therefore the center of gravity (CoG) shifts over the mission as displayed in Table \ref{tab:cog}. Since the CoG is the reference point for the calculation of the moments of inertia, these change as well over the duration of the mission, presented in Table \ref{tab:inertia}. In all instances, the criteria set in Equation \ref{eq:SC-stab} is fulfilled. To further validate this stability analysis, the CoG can be moved away from the X-axis by 60 mm in the Y- and Z-direction, which is the maximum tolerable limit given by the Ariane 6 user's manual for the static unbalance of a three-axis stabilized spacecraft \cite{Arianspace.2016}. With this offset, the moments of inertia, displayed in Table \ref{tab:offinertia} result. In this case, the stability criteria is still valid, therefore the chosen configuration is feasible.
+
+\begin{table}[H]
+\caption{Center of Gravity}
+\label{tab:cog}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{|lccccc|}
+\hline
+\multicolumn{6}{|c|}{\cellcolor[HTML]{8DB4E1}\textbf{Center of gravity over time}}                                                                                    \\ \hline
+\multicolumn{1}{|l|}{Point in time}  & \multicolumn{1}{c|}{1}      & \multicolumn{1}{c|}{2}      & \multicolumn{1}{c|}{3}      & \multicolumn{1}{c|}{4}      & 5      \\ \hline
+\multicolumn{1}{|l|}{$CoG_x$ {[}m{]}} & \multicolumn{1}{c|}{1.6966} & \multicolumn{1}{c|}{1.7322} & \multicolumn{1}{c|}{1.7324} & \multicolumn{1}{c|}{1.9146} & 1.9192  \\ \hline
+\multicolumn{1}{|l|}{$CoG_y$ {[}m{]}} & \multicolumn{1}{c|}{0.0000}      & \multicolumn{1}{c|}{0.0000}      & \multicolumn{1}{c|}{0.0000}      & \multicolumn{1}{c|}{0.0000}      & 0.0000      \\ \hline
+\multicolumn{1}{|l|}{$CoG_z$ {[}m{]}} & \multicolumn{1}{c|}{0.0000}      & \multicolumn{1}{c|}{0.0000}      & \multicolumn{1}{c|}{0.0000}      & \multicolumn{1}{c|}{0.0000}      & 0.0000      \\ \hline
+\multicolumn{1}{|l|}{Point in time}  & \multicolumn{1}{c|}{6}      & \multicolumn{1}{c|}{7}      & \multicolumn{1}{c|}{8}      & \multicolumn{1}{c|}{9}      & 10     \\ \hline
+\multicolumn{1}{|l|}{$CoG_x$ {[}m{]}} & \multicolumn{1}{c|}{1.9196} & \multicolumn{1}{c|}{1.8928}  & \multicolumn{1}{c|}{1.8613} & \multicolumn{1}{c|}{1.8571} & 1.8276 \\ \hline
+\multicolumn{1}{|l|}{$CoG_y$ {[}m{]}} & \multicolumn{1}{c|}{0.0000}      & \multicolumn{1}{c|}{0.0000}      & \multicolumn{1}{c|}{0.0000}      & \multicolumn{1}{c|}{0.0000}      & 0.0000      \\ \hline
+\multicolumn{1}{|l|}{$CoG_z$ {[}m{]}} & \multicolumn{1}{c|}{0.0000}      & \multicolumn{1}{c|}{0.0000}      & \multicolumn{1}{c|}{0.0000}      & \multicolumn{1}{c|}{0.0000}      & 0.0000      \\ \hline
+\end{tabular}}
+\end{table}
+
+\begin{table}[H]
+\caption{Moments of Inertia}
+\label{tab:inertia}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{|lccccc|}
+\hline
+\multicolumn{6}{|c|}{\cellcolor[HTML]{8DB4E1}\textbf{Moment of inertia over time}}                                                                                                     \\ \hline
+\multicolumn{1}{|l|}{Point in time}                   & \multicolumn{1}{c|}{1}      & \multicolumn{1}{c|}{2}      & \multicolumn{1}{c|}{3}      & \multicolumn{1}{c|}{4}      & 5      \\ \hline
+\multicolumn{1}{|l|}{Ix {[}$kgm^{2}${]}} & \multicolumn{1}{c|}{3008.1} & \multicolumn{1}{c|}{2885.0} & \multicolumn{1}{c|}{2884.7} & \multicolumn{1}{c|}{2720.8} & 2718.3 \\ \hline
+\multicolumn{1}{|l|}{Iy {[}$kgm^{2}${]}} & \multicolumn{1}{c|}{5626.6} & \multicolumn{1}{c|}{5571.0} & \multicolumn{1}{c|}{5570.8} & \multicolumn{1}{c|}{5496.9} & 5495.8 \\ \hline
+\multicolumn{1}{|l|}{Iz {[}$kgm^{2}${]}} & \multicolumn{1}{c|}{7416.7} & \multicolumn{1}{c|}{7238.0} & \multicolumn{1}{c|}{7237.6} & \multicolumn{1}{c|}{6999.8} & 6996.1 \\ \hline
+\multicolumn{1}{|l|}{Point in time}                   & \multicolumn{1}{c|}{6}      & \multicolumn{1}{c|}{7}      & \multicolumn{1}{c|}{8}      & \multicolumn{1}{c|}{9}      & 10     \\ \hline
+\multicolumn{1}{|l|}{Ix {[}$kgm^{2}${]}} & \multicolumn{1}{c|}{2718.1} & \multicolumn{1}{c|}{2718.1} & \multicolumn{1}{c|}{2718.1} & \multicolumn{1}{c|}{2718.1} & 2718.1 \\ \hline
+\multicolumn{1}{|l|}{Iy {[}$kgm^{2}${]}} & \multicolumn{1}{c|}{5495.7} & \multicolumn{1}{c|}{5455.0} & \multicolumn{1}{c|}{5411.0} & \multicolumn{1}{c|}{5405.5} & 5368.1 \\ \hline
+\multicolumn{1}{|l|}{Iz {[}$kgm^{2}${]}} & \multicolumn{1}{c|}{6995.8} & \multicolumn{1}{c|}{6955.2} & \multicolumn{1}{c|}{6911.2} & \multicolumn{1}{c|}{6905.7} & 6868.3 \\ \hline
+\end{tabular}}
+\end{table}
+
+\begin{table}[H]
+\caption{Moments of Inertia with an off-center CoG by 60 mm in Y- and Z-direction}
+\label{tab:offinertia}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{|lccccc|}
+\hline
+\multicolumn{6}{|c|}{\cellcolor[HTML]{8DB4E1}\textbf{Moment of inertia over time}}                                                                                                     \\ \hline
+\multicolumn{1}{|l|}{Point in time}                   & \multicolumn{1}{c|}{1}      & \multicolumn{1}{c|}{2}      & \multicolumn{1}{c|}{3}      & \multicolumn{1}{c|}{4}      & 5      \\ \hline
+\multicolumn{1}{|l|}{Ix {[}$kgm^{2}${]}} & \multicolumn{1}{c|}{2967.7} & \multicolumn{1}{c|}{2860.8} & \multicolumn{1}{c|}{2860.5} & \multicolumn{1}{c|}{2718.3} & 2716.0 \\ \hline
+\multicolumn{1}{|l|}{Iy {[}$kgm^{2}${]}} & \multicolumn{1}{c|}{5631.4} & \multicolumn{1}{c|}{5574.7} & \multicolumn{1}{c|}{5574.6} & \multicolumn{1}{c|}{5499.1} & 5498.0 \\ \hline
+\multicolumn{1}{|l|}{Iz {[}$kgm^{2}${]}} & \multicolumn{1}{c|}{7372.4} & \multicolumn{1}{c|}{7211.0} & \multicolumn{1}{c|}{7210.6} & \multicolumn{1}{c|}{6995.9} & 6992.6 \\ \hline
+\multicolumn{1}{|l|}{Point in time}                   & \multicolumn{1}{c|}{6}      & \multicolumn{1}{c|}{7}      & \multicolumn{1}{c|}{8}      & \multicolumn{1}{c|}{9}      & 10     \\ \hline
+\multicolumn{1}{|l|}{Ix {[}$kgm^{2}${]}} & \multicolumn{1}{c|}{2715.9} & \multicolumn{1}{c|}{2715.5} & \multicolumn{1}{c|}{2715.1} & \multicolumn{1}{c|}{2715.1} & 2714.7 \\ \hline
+\multicolumn{1}{|l|}{Iy {[}$kgm^{2}${]}} & \multicolumn{1}{c|}{5497.9} & \multicolumn{1}{c|}{5457.1} & \multicolumn{1}{c|}{5412.9} & \multicolumn{1}{c|}{5407.3} & 5369.7 \\ \hline
+\multicolumn{1}{|l|}{Iz {[}$kgm^{2}${]}} & \multicolumn{1}{c|}{6992.3} & \multicolumn{1}{c|}{6951.5} & \multicolumn{1}{c|}{6907.3} & \multicolumn{1}{c|}{6901.8} & 6864.2 \\ \hline
+\end{tabular}}
+\end{table}
+
+\newpage
+
+\subsection{Spacecraft Launcher Compatibility}
+
+In this section it shall be analyzed, if the spacecraft complies with the requirements of the Ariane 62 launch vehicle, depicted in Table \ref{tab:launch}. Here, the CoG envelope is a result from the given equations with the inserted spacecraft wet mass, which is presented in Table \ref{tab:mas-bud} for a spacecraft with a wet mass bellow 4 tons. By comparing these values with the spacecrafts characteristics in Table \ref{tab:sc-launch} it can be demonstrated, that the requirements of the launch vehicle are fulfilled, even with a margin of 10 \%. Also the moments of inertia in the transverse and rolling directing are within the given boundaries. Consequently, the spacecraft is suited for a launch with the Ariane 62 launch vehicle.
+
+\begin{table}[H]
+\caption{Ariane 62 launch vehicle requirements \cite{Arianspace.2016}}
+\label{tab:launch}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{|lc|}
+\hline
+\multicolumn{2}{|c|}{\cellcolor[HTML]{8DB4E1}\textbf{Ariane 62 launch requirements}}                                                \\ \hline
+\multicolumn{1}{|l|}{Launch weight requirement {[}kg{]}}                                  & \textless 2600.0                        \\ \hline
+\multicolumn{1}{|l|}{Diameter {[}m{]}}                                                    & \textless 4.600                         \\ \hline
+\multicolumn{1}{|l|}{CoG requirement in X {[}m{]}}                                        & 0.4887 \textless CoG \textless   2.3663 \\ \hline
+\multicolumn{1}{|l|}{CoG requirement in Y and Z {[}m{]}}                                  & CoG \textless 0.060                     \\ \hline
+\multicolumn{1}{|l|}{Spacecraft transverse inertia momentum {[}$kgm^{2}${]}} & \textless 90000                         \\ \hline
+\multicolumn{1}{|l|}{Spacecraft roll inertia momentum {[}$kgm^{2}${]}}       & \textless 45000                         \\ \hline
+\end{tabular}}
+\end{table}
+
+\begin{table}[H]
+\caption{Spacecraft Launch Parameters}
+\label{tab:sc-launch}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{|lc|}
+\hline
+\multicolumn{2}{|c|}{\cellcolor[HTML]{8DB4E1}\textbf{Spacecraft launch parameters}}                               \\ \hline
+\multicolumn{1}{|l|}{Launch weight {[}kg{]}}                                                   & 2141.4           \\ \hline
+\multicolumn{1}{|l|}{Launch weight with 10 \% margin{[}kg{]}}                                  & 2355.5           \\ \hline
+\multicolumn{1}{|l|}{Dimensions in X {[}m{]}}                                                  & 4.000            \\ \hline
+\multicolumn{1}{|l|}{Dimensions in Y and Z (without RCS) {[}m{]}}                              & 2.7058 x 2.7058  \\ \hline
+\multicolumn{1}{|l|}{Dimensions in Y and Z (with RCS) {[}m{]}}                                 & 2.7058 x 3.8250  \\ \hline
+\multicolumn{1}{|l|}{CoG in X {[}m{]}}                                                         & 1.6966 to 1.9196 \\ \hline
+\multicolumn{1}{|l|}{CoG in X with 10\% margin {[}m{]}}                                        & 1.5269 to 2.1116 \\ \hline
+\multicolumn{1}{|l|}{CoG in Y and Z {[}m{]}}                                                   & 0.000            \\ \hline
+\multicolumn{1}{|l|}{Spacecraft transverse inertia momentum in Y {[}$kgm^{2}${]}} & 3008.1          \\ \hline
+\multicolumn{1}{|l|}{Spacecraft transverse inertia momentum in Z {[}$kgm^{2}${]}} & 5626.6          \\ \hline
+\multicolumn{1}{|l|}{Spacecraft roll inertia momentum in X {[}$kgm^{2}${]}}       & 7416.7           \\ \hline
+\end{tabular}}
+\end{table}
+
+To conclude this section, the spacecraft is shown in the chosen faring, namely the A62 short fairing, in Figure \ref{fig:faring} with its solar panels folded. The dimensions of the faring are taken from the Ariane 6 user's manual \cite{Arianspace.2016}.
+
+\newpage
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\linewidth]{img/Faring.PNG}
+  \caption{Spacecraft in the A62 short faring with undeployed solar arrays}
+  \label{fig:faring}
+\end{figure}
+
+
+\subsection{Spacecraft Rendering}
+
+The final rendering of the spacecraft together with a rendering of the propulsion system of the spacecraft is visualized in this section. The fist rendering shows the spacecraft in its orbital configuration with the solar arrays deployed in Figure  \ref{fig:rendering}. The key components that make up the chemical and electrical propulsion system together with the dedicated piping are shown in the second rendering, Figure \ref{fig:prop}. Special attention is given to the complex orientation of the pipes in 3D so that the amount of bends is equal between the respective MMH pipes from the tank in red and the MON-3 pipes form both tanks in light blue. This ensures a similar pressure drop over the pipes between the fuel tanks and the engine. The helium tanks in purple are located on top of the fuel tanks. In the middle right above the MMH tank is the xenon tank in cyan which feeds into the electrical propulsion system. More information about the placement of the individual parts is given in form of the technical drawings in the Appendix \ref{Appendix}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{img/Rendering.PNG}
+  \caption{Spacecraft with deployed solar arrays}
+  \label{fig:rendering}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{img/PROP.PNG}
+  \caption{Spacecraft Propulsion System}
+  \label{fig:prop}
+\end{figure}
+
+
+
+\section{Summary and Lessons Learned}
+The report aimed to propose a preliminary design for the propulsion system of a spacecraft that will deliver a surface probe to Phobos. The concept presented combines a chemical and electrical engine, with all necessary components selected and displayed in their respective system schematics. The orbit trajectory selected to reach the destination with the proposed concept is also described. Simulations of the pressure and temperature of helium as a pressurant gas were performed and an analysis for the whole spacecraft stability and RCS thruster function was conducted, to ensure feasibility and safe operation.
+
+The concept development process highlighted the complexity of designing a propulsion system for space missions. The main lesson learned by the team was that every component and aspect in the system is interconnected and that each design decision has a significant impact on the overall system. For example, each small change in the mission trajectory affected the propellant budget which, affects the weight and feasibility of the propulsion system. Similarly, using two propellant tanks instead of one redefined many other aspects such as the launch mass, the pressurant gas calculation or the stability analysis.
+
+The study presented a feasible preliminary design for the propulsion system, but there are still several open points that require further investigation. One such point is the design change of using one helium tank instead of two, which needs to be further analyzed for its feasibility and impact on the overall propulsion system. Furthermore, a more detailed calculation of the pressure drops over components and pipes needs to be conducted to redefine the pressure needed in the propellant tanks. This calculation could potentially affect the performance of the propulsion system. For the presented concept, the inlet pressure for the combustion chamber was taken as its maximum of 18.5 bars. However, its effect on the mixture ratio or efficiency of the engine, which requires further study. In case of the spacecrafts arrangement, the analysis is performed in a simplified manner. For a more detailed analysis, a CAD program can be used to analyze the behaviour of the center of gravity as well as the moments of inertia. Addressing these open points will improve the feasibility and performance of the proposed mission. 
+
+\section{Team Setup}
+\subsection{Beatriz Mas Sanz - Systems Engineer}
+\begin{enumerate}
+    \item Project Plan and Requirements Definition
+    \item Propulsion System Trade-offs
+    \item Pressurant Tank Sizing Script
+\end{enumerate}
+\subsection{Marta Pelivan - Propulsion System Architect}
+\begin{enumerate}
+    \item Chemical Equipment Selection
+    \item Chemical Propulsion Architecture
+\end{enumerate}
+\subsection{Julian Schmid - Spacecraft System Architect}
+\begin{enumerate}
+    \item MATLAB script mass design
+    \item MATLAB script arrangement analysis
+    \item MATLAB script dV
+    \item 3D Assembly and technical drawings
+\end{enumerate}
+\subsection{Sven J. Steinert - Mission Analyst and IT Specialist}
+\begin{enumerate}
+    \item GMAT Trajectory and Evaluation
+    \item 3D Modelling
+    \item Electric Propulsion System
+\end{enumerate}
+
+\section{Access of Data}
+All presented files can be accessed in the \href{https://github.com/Sven-J-Steinert/MomenTUM}{Git-Repository}.
+
+
+
+
+
+
+
+
+%\include{old}
+\newpage
+
+\include{member1}
+\include{member2}
+\include{member3}
+\include{member4}
+
+\bibliographystyle{ieeetr}
+\bibliography{bibliography}
+
+\newpage
+
+\appendices
+\section{Additional Resources}
+\label{Appendix}
+
+\begin{table}[H]
+\centering
+\caption{Pressurant Tank \cite{MTTankka92:online}}
+\label{tab:pre-tan}
+\resizebox{\linewidth}{!}{%
+\begin{tblr}{
+  row{2} = {Spindle},
+  row{4} = {Spindle},
+  hlines,
+  vlines,
+}
+Supplier          & MT Aerospace                                                                \\
+MEOP              & 310 bar                                                                     \\
+Total Volume      & 40-75 l                                                                     \\
+Temperature Range & -30/ +60 ºC                                                                 \\
+Tank Dry Mass     & 8.5 – 14.4 kg                                                               \\
+Tank Diameter     & 432 mm                                                                      \\
+Tank Length       & 467 - 728 mm                                                                \\
+Material          & {Ti-6Al-4V (Shell)\\Ti-3Al-2.5V (Tube)\\Epoxy-based CFRP / T800 (Overwrap)} 
+\end{tblr}
+}
+\end{table}
+
+
+\include{appendix}
+
+
+\end{document}
+
